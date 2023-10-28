@@ -45,7 +45,7 @@
 </div>
 
 @section('scripts')
-    @vite(['resources/assets/css/app.css', 'resources/assets/js/main.ts'])
+    @vite(['resources/assets/js/app.js', 'resources/assets/js/main.ts'])
 @show
 </body>
 </html>
