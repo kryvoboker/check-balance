@@ -53,56 +53,18 @@ class User extends Authenticatable
      * @param string $email
      * @return false[]
      */
-    public static function takeAuthInfo(string $email) : array
+    public static function takeUserInfo(string $email) : Collection
     {
-        $user_info = DB::table('users')
+        return DB::table('users')
             ->select('numbers_failed_try_auth', 'last_failed_try_auth', 'status')
             ->where('email', '=', $email)
             ->get();
-
-        return self::checkCanAuth($user_info, $email);
-    }
-
-    /**
-     * @param Collection $user
-     * @param string $email
-     * @return false[]
-     */
-    private static function checkCanAuth(Collection $user, string $email) : array
-    {
-        $result = [
-            'can_auth' => false
-        ];
-
-        if ($user->isEmpty()) {
-            $result['error'] = __('login/login.error_user_not_exists');
-
-            return $result;
-        } else if (!$user->first()->status) {
-            $result['error'] = __('login/login.error_access_denied');
-
-            return $result;
-        }
-
-        $last_failed_try_auth = $user->first()->last_failed_try_auth;
-
-        if ($user->first()->numbers_failed_try_auth > 3 && strtotime($last_failed_try_auth) > strtotime('-3 hours')) {
-            $result['error_user_failed_tries_auth'] = __('login/login.error_user_failed_tries_auth');
-
-            return $result;
-        } else if (strtotime($last_failed_try_auth) < strtotime('-3 hours')) {
-            self::clearTryAuth($email);
-        }
-
-        $result['can_auth'] = true;
-
-        return $result;
     }
 
     /**
      * @param string $email
      */
-    private static function clearTryAuth(string $email) : void
+    public static function clearTryAuth(string $email) : void
     {
         DB::table('users')->where('email', '=', $email)
             ->update([

@@ -17,9 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['web', 'guest', 'auth.session'])->group(function () {
     Route::redirect('/', 'login');
 
-    Route::view('login', 'auth.login')->name('login');
-
+    Route::get('login', [LoginController::class, 'index'])->name('login');
     Route::post('login', [LoginController::class, 'login'])->name('login');
+
+
 });
 
 Route::middleware(['auth', 'auth.session'])->group(function () {
