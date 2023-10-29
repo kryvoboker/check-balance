@@ -14,10 +14,6 @@ class LoginController extends Controller
 {
     public function index() : Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
-        if (Auth::check()) {
-            redirect('home');
-        }
-
         return view('auth.login');
     }
 

@@ -59,7 +59,7 @@
             </div>
 
             <div class="d-flex flex-column gap-3">
-                <a href="#" class="link-primary">
+                <a href="{{ route('register') }}" class="link-primary">
                     {{ __('user/login.register') }}
                 </a>
 

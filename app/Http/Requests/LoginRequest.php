@@ -23,7 +23,7 @@ class LoginRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize() : RedirectResponse|bool
+    public function authorize() : bool
     {
         if (!filter_var($this->input('email'), FILTER_VALIDATE_EMAIL)) {
             $this->session()->flash('errors', __('user/login.error_email'));
@@ -71,11 +71,12 @@ class LoginRequest extends FormRequest
      *
      * @return array<string, string>
      */
-    #[ArrayShape(['email.required' => "string"])]
+    #[ArrayShape(['email.required' => "string", 'password.required' => "string"])]
     public function messages(): array
     {
         return [
-            'email.required' => 'A title is required',
+            'email.required' => __('user/validation.error_email'),
+            'password.required' => __('user/validation.error_password'),
         ];
     }
 }
