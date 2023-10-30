@@ -26,10 +26,14 @@ class LoginController extends Controller
         if (Auth::attempt($request->all())) {
             $request->session()->regenerate();
 
-            return redirect()->intended(route('home'))->with(['message_success' => __('user/login.success')]);
+            return redirect()
+                ->intended(route('home'))
+                ->with(['message_success' => __('user/login.success')]);
         }
 
-        return redirect()->intended('login')->withErrors(['errors' => __('user/login.error_user_not_exists')])
+        return redirect()
+            ->intended(route('login'))
+            ->withErrors(['errors' => __('user/login.error_user_not_exists')])
             ->withInput();
     }
 }

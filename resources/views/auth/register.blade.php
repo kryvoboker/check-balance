@@ -13,7 +13,7 @@
 
         @if ($errors->any())
             <div class="alert alert-danger d-flex align-items-start gap-3">
-                <ul>
+                <ul class="m-0">
                     @foreach($errors->all() as $error)
                         <li>
                             {{ $error }}
@@ -27,6 +27,9 @@
 
         <form class="needs-validation d-flex flex-column" action="{{ route('register') }}"
               method="post" novalidate>
+
+            @csrf
+
             <div class="mb-3 row">
                 <label for="name" class="col-sm-3 col-form-label">
                     {{ __('user/register.name') }}

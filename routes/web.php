@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\User\LoginController;
-use App\Http\Controllers\User\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,17 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['web', 'guest', 'auth.session'])->group(function () {
-    Route::redirect('/', 'login');
+require_once base_path() . '/routes/web/login.php';
+require_once base_path() . '/routes/web/register.php';
 
-    Route::get('login', [LoginController::class, 'index'])->name('login');
-    Route::post('login', [LoginController::class, 'login'])->name('login');
-
-    Route::get('register', [RegisterController::class, 'index'])->name('register');
-    Route::post('register', [RegisterController::class, 'register'])->name('register');
-});
-
-Route::middleware(['auth', 'auth.session'])->group(function () {
-    Route::view('/', 'home')->name('home');
-});
+Route::redirect('/', 'login')->middleware(['web', 'guest', 'auth.session']);
+Route::view('/', 'home')->name('home')->middleware(['auth', 'auth.session']);
 

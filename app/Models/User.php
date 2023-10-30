@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -71,5 +72,16 @@ class User extends Authenticatable
                 'numbers_failed_try_auth' => 0,
                 'last_failed_try_auth' => date('Y-m-d H:i:s'),
             ]);
+    }
+
+    /**
+     * Interact with the user's first name.
+     */
+    protected function telephone(): Attribute //TODO: check this mutator for telephone - https://laravel.com/docs/10.x/eloquent-mutators#defining-a-mutator
+    {
+        return Attribute::make(
+//            get: fn (string $value) => strtoupper($value),
+            set: fn (string $telephone) => preg_replace(['/^\+38/', '/\D+/'], '', $telephone),
+        );
     }
 }
