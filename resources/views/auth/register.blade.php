@@ -136,3 +136,6 @@
         </form>
     </div>
 @endsection
+
+@section('footer')
+@endsection

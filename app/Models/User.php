@@ -52,7 +52,7 @@ class User extends Authenticatable
 
     /**
      * @param string $email
-     * @return false[]
+     * @return Collection
      */
     public static function takeUserInfo(string $email) : Collection
     {
@@ -65,7 +65,7 @@ class User extends Authenticatable
     /**
      * @param string $email
      */
-    public static function clearTryAuth(string $email) : void
+    public static function clearTryAuth(string $email) : void //TODO: rebuild this logic using user_login table
     {
         DB::table('users')->where('email', '=', $email)
             ->update([
@@ -76,12 +76,29 @@ class User extends Authenticatable
 
     /**
      * Interact with the user's first name.
+     * Check this mutator for telephone - https://laravel.com/docs/10.x/eloquent-mutators#defining-a-mutator
      */
-    protected function telephone(): Attribute //TODO: check this mutator for telephone - https://laravel.com/docs/10.x/eloquent-mutators#defining-a-mutator
+    /*protected function telephone(): Attribute
     {
         return Attribute::make(
-//            get: fn (string $value) => strtoupper($value),
+            get: fn (string $telephone) => $this->parseTelephone($telephone),
             set: fn (string $telephone) => preg_replace(['/^\+38/', '/\D+/'], '', $telephone),
         );
-    }
+    }*/
+
+    /**
+     * @param string $telephone
+     * @return string
+     */
+    /*private function parseTelephone(string $telephone) : string
+    {
+        $mask = '+38 (___) ___-__-__';
+        $phone_length = mb_strlen($telephone, 'UTF-8');
+
+        for ($index_number = 0; $index_number < $phone_length; $index_number++) {
+            $mask = preg_replace('/_/', $telephone[$index_number], $mask, 1);
+        }
+
+        return $mask;
+    }*/
 }

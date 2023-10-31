@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -19,13 +20,21 @@ class RegisterController extends Controller
 
     /**
      * @param RegisterRequest $registerRequest
-     * @return RedirectResponse
+     * @return RedirectResponse|\Illuminate\Contracts\Foundation\Application|Factory|View|Application
      */
-    public function register(RegisterRequest $registerRequest) : RedirectResponse
+    public function register(RegisterRequest $registerRequest) : RedirectResponse|\Illuminate\Contracts\Foundation\Application|Factory|View|Application
     {
-        User::create($registerRequest->all());
+        $user = User::create($registerRequest->all());
 
-        return redirect()
-            ->intended('/');
+        if ($user) {
+            Auth::login($user);
+
+            return redirect()
+                ->intended(route('success_register'));
+        }
+
+        return back()
+            ->withErrors(['errors' => __('user/validation.error_fail_register')])
+            ->withInput();
     }
 }

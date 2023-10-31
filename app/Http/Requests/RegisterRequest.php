@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -33,8 +32,8 @@ class RegisterRequest extends FormRequest
         return [
             'name' => ['required', 'min:3', 'max:255'],
             'lastname' => ['required', 'min:3', 'max:255'],
-            'email' => ['required', 'max:255', 'email'],
-            'telephone' => ['required', 'regex:/^\D*(\d\D*){10,12}$/'],
+            'email' => ['required', 'max:255', 'email', 'unique:App\Models\User,email'],
+            'telephone' => ['required', 'regex:/^\D*(\d\D*){10,12}$/', 'unique:App\Models\User,telephone'],
             'password' => ['required', 'min:3', 'max:255', 'confirmed'],
         ];
     }
@@ -45,16 +44,22 @@ class RegisterRequest extends FormRequest
      * @return array<string, string>
      */
     #[ArrayShape([
-        'email.required' => "mixed",
-        'password.required' => "mixed",
-        'confirmed' => "mixed"
+        'name' => "string",
+        'lastname' => "string",
+        'email' => "string",
+        'telephone' => "string",
+        'password' => "string",
+        'confirmed' => "string",
     ])]
     public function messages(): array
     {
         return [
-            'email.required' => __('user/validation.error_email'),
-            'password.required' => __('user/validation.error_password'),
-            'confirmed' => __('user/validation.error_password_confirmation'),
+            'name' => __('user/validation_register.error_name'),
+            'lastname' => __('user/validation_register.error_lastname'),
+            'email' => __('user/validation_register.error_email'),
+            'telephone' => __('user/validation_register.error_telephone'),
+            'password' => __('user/validation_register.error_password'),
+            'confirmed' => __('user/validation_register.error_password_confirmation'),
         ];
     }
 }

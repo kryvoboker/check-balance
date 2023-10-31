@@ -31,8 +31,7 @@ class LoginController extends Controller
                 ->with(['message_success' => __('user/login.success')]);
         }
 
-        return redirect()
-            ->intended(route('login'))
+        return back()
             ->withErrors(['errors' => __('user/login.error_user_not_exists')])
             ->withInput();
     }
