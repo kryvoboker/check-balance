@@ -22,7 +22,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->app->singleton(AuthorizationService::class, function ($app) {
+        $this->app->singleton(AuthorizationService::class, function () {
             return new AuthorizationService();
         });
     }
