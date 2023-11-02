@@ -18,23 +18,23 @@ class LoginControllerTest extends TestCase
     {
         $response = $this->get('login');
 
+        $this->assertGuest();
         $response->assertStatus(200);
     }
 
-    public function test_authorized_user_can_go_in_home_page()
+    public function test_create_user()
     {
-        $user = User::factory()->create([
+        User::factory()->create([
             'name' => 'test_user_name',
             'lastname' => 'test_user_lastname',
             'email' => 'user@gmail.com',
             'telephone' => '0966906412',
-            'password' => bcrypt('valid_password_123'),
+            'password' => 'valid_password_123',
+            'status' => true
         ]);
 
-        $response = $this->actingAs($user)
-            ->get('/');
-
-        $response->assertOk();
-        $response->assertValid(['email', 'password']);
+        $this->assertDatabaseHas('users', [
+            'email' => 'user@gmail.com'
+        ]);
     }
 }

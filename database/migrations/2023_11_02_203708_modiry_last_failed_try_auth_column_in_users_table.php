@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_login', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->timestamp('last_failed_try_auth')->default(date('Y-m-d H:i:s'))->change();
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_login');
+        Schema::table('users', function (Blueprint $table) {
+            $table->timestamp('last_failed_try_auth')->nullable(true)->change();
+        });
     }
 };

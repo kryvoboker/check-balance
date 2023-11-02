@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +21,7 @@ require_once base_path() . '/routes/web/logout.php';
 Route::redirect('/', 'login')
     ->middleware(['web', 'guest', 'auth.session']);
 
-Route::view('/', 'home')
+Route::get('/', [HomeController::class, 'index'])
     ->middleware(['auth', 'auth.session'])
     ->name('home');
 
