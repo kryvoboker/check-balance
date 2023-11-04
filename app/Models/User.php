@@ -63,18 +63,6 @@ class User extends Authenticatable
     }
 
     /**
-     * @param string $email
-     */
-    public static function clearTryAuth(string $email) : void //TODO: rebuild this logic using user_login table
-    {
-        DB::table('users')->where('email', '=', $email)
-            ->update([
-                'numbers_failed_try_auth' => 0,
-                'last_failed_try_auth' => date('Y-m-d H:i:s'),
-            ]);
-    }
-
-    /**
      * Interact with the user's first name.
      * Check this mutator for telephone - https://laravel.com/docs/10.x/eloquent-mutators#defining-a-mutator
      */

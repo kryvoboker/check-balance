@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_login', function (Blueprint $table) {
+        Schema::create('user_logins', function (Blueprint $table) {
             $table->id()->unsigned();
             $table->ipAddress()->nullable(false)->index('ip_address_indx');
             $table->string('email', 255)->nullable(false);
             $table->tinyInteger('number_of_tries', false, true);
-            $table->timestamp('date_modified')->default(date('Y-m-d H:i:s'))->nullable(false);
+            $table->timestamp('date_modified')->nullable(false);
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_login');
+        Schema::dropIfExists('user_logins');
     }
 };
