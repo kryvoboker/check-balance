@@ -26,13 +26,13 @@ class AuthorizationService
             return $result;
         }
 
-        $last_failed_try_auth = $user->first()->last_failed_try_auth;
+        /*$last_failed_try_auth = $user->first()->last_failed_try_auth; //TODO: modify it for user_login table
 
         if ($user->first()->numbers_failed_try_auth > 3 && strtotime($last_failed_try_auth) > strtotime('-3 hours')) {
             $result['error_user_failed_tries_auth'] = __('user/login.error_user_failed_tries_auth');
 
             return $result;
-        }
+        }*/
 
         $result['can_auth'] = true;
 

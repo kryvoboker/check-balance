@@ -35,6 +35,6 @@ class LoginController extends Controller
 
         return back()
             ->withErrors(['errors' => __('user/login.error_user_not_exists')])
-            ->withInput();
+            ->onlyInput('email');
     }
 }

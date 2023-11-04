@@ -5,8 +5,6 @@ namespace App\Http\Requests;
 use App\Models\User;
 use App\Services\AuthorizationService;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Cookie;
 use JetBrains\PhpStorm\ArrayShape;
 
 class LoginRequest extends FormRequest
@@ -35,7 +33,7 @@ class LoginRequest extends FormRequest
 
         $auth_info = $this->authorizationService->canAuthenticate($user_info);
 
-        if ($auth_info['can_auth']) {
+        /*if ($auth_info['can_auth']) { //TODO: modify it for user_login table
             User::clearTryAuth($this->input('email'));
 
             return true;
@@ -47,7 +45,7 @@ class LoginRequest extends FormRequest
             Cookie::queue('user_failed_tries_auth', true, 60 * 3);
         } else {
             $this->session()->flash('errors', $auth_info['error']);
-        }
+        }*/
 
         return true;
     }

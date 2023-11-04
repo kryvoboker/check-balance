@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\User\HomeController;
+use App\Http\Controllers\User\LoginController;
+use App\Http\Controllers\User\LogoutController;
+use App\Http\Controllers\User\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,10 +17,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-require_once base_path() . '/routes/web/login.php';
-require_once base_path() . '/routes/web/register.php';
-require_once base_path() . '/routes/web/logout.php';
-
 Route::redirect('/', 'login')
     ->middleware(['web', 'guest', 'auth.session']);
 
@@ -25,3 +24,26 @@ Route::get('/', [HomeController::class, 'index'])
     ->middleware(['auth', 'auth.session'])
     ->name('home');
 
+// Login start
+Route::middleware(['web', 'guest', 'auth.session'])->group(function () {
+    Route::get('login', [LoginController::class, 'index'])->name('login');
+    Route::post('login', [LoginController::class, 'login'])->name('login');
+});
+// Login end
+
+// Register start
+Route::middleware(['web', 'guest', 'auth.session'])->group(function () {
+    Route::get('register', [RegisterController::class, 'index'])->name('register');
+    Route::post('register', [RegisterController::class, 'register'])->name('register');
+});
+
+Route::view('success_register', 'auth.success_register')
+    ->middleware(['auth', 'auth.session'])
+    ->name('success_register');
+// Register end
+
+// Logout start
+Route::get('logout', [LogoutController::class, 'logout'])
+    ->middleware(['auth', 'auth.session'])
+    ->name('logout');
+// Logout end
