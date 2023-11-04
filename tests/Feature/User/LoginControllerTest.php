@@ -15,9 +15,8 @@ class LoginControllerTest extends TestCase
 
     public function test_login_page_return_success_when_come_in() : void
     {
-        $this->assertGuest();
-
-        $this->get('login')
+        $this->assertGuest()
+            ->get('login')
             ->assertStatus(200);
     }
 

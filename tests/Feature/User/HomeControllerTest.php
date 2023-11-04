@@ -12,9 +12,8 @@ class HomeControllerTest extends TestCase
 
     public function test_redirect_guest_from_main_page(): void
     {
-        $this->assertGuest();
-
-        $this->get('/')
+        $this->assertGuest()
+            ->get('/')
             ->assertRedirectToRoute('login');
     }
 
@@ -35,9 +34,8 @@ class HomeControllerTest extends TestCase
         ])
             ->assertRedirectToRoute('home');
 
-        $this->assertAuthenticatedAs($user);
-
-        $this->get('/')
+        $this->assertAuthenticatedAs($user)
+            ->get('/')
             ->assertStatus(200);
     }
 }

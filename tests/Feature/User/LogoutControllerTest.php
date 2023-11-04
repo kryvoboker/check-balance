@@ -27,9 +27,8 @@ class LogoutControllerTest extends TestCase
         ])
             ->assertRedirectToRoute('home');
 
-        $this->assertAuthenticatedAs($user);
-
-        $this->get('logout')
+        $this->assertAuthenticatedAs($user)
+            ->get('logout')
             ->assertRedirectToRoute('login');
 
         $this->assertGuest();

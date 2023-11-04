@@ -12,9 +12,8 @@ class RegisterControllerTest extends TestCase
 
     public function test_register_page_return_success_when_come_in() : void
     {
-        $this->assertGuest();
-
-        $this->get('register')
+        $this->assertGuest()
+            ->get('register')
             ->assertStatus(200);
     }
 
@@ -27,9 +26,8 @@ class RegisterControllerTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'email' => 'user@gmail.com'
-        ]);
-
-        $this->assertAuthenticatedAs(Auth::user());
+        ])
+            ->assertAuthenticatedAs(Auth::user());
     }
 
     public function test_failure_register_user()
@@ -55,11 +53,9 @@ class RegisterControllerTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'email' => 'user@gmail.com'
-        ]);
-
-        $this->assertAuthenticatedAs(Auth::user());
-
-        $this->get('success_register')
+        ])
+            ->assertAuthenticatedAs(Auth::user())
+            ->get('success_register')
             ->assertStatus(200);
     }
 
