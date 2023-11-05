@@ -16,7 +16,6 @@ return new class extends Migration
             $table->ipAddress()->nullable(false)->index('ip_address_indx');
             $table->string('email', 255)->nullable(false);
             $table->tinyInteger('number_of_tries', false, true);
-            $table->timestamp('date_modified')->nullable(false);
             $table->timestamps();
         });
     }

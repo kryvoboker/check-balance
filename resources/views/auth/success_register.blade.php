@@ -9,8 +9,8 @@
     <div class="col-sm-8 col-12 mt-0 mb-0 ms-auto me-auto d-flex flex-column align-items-center">
         <h1 class="fs-1 text-center mb-5">{{ __('user/register.success') }}</h1>
 
-        <a class="btn btn-primary mb-4" href="{{ route('home') }}" role="button">
-            {{ __('user/register.go_home') }}
+        <a class="btn btn-primary mb-4" href="{{ route('login') }}" role="button">
+            {{ __('user/register.login_in_account') }}
         </a>
 
         <img class="img-fluid"

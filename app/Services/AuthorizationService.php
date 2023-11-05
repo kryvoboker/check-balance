@@ -2,40 +2,113 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Collection;
+use App\Models\User;
+use App\Models\User\UserLogin;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Hash;
 
 class AuthorizationService
 {
     /**
-     * @param Collection $user
-     * @return false[]
+     * @param string $email
+     * @param $password
+     * @param string $ip_address
+     * @return void
      */
-    public function canAuthenticate(Collection $user) : array
+    public function canAuthenticate(string $email, $password, string $ip_address) : void
     {
-        $result = [
-            'can_auth' => false
-        ];
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            session()->flash('errors', __('user/login.error_email'));
 
-        if ($user->isEmpty()) {
-            $result['error'] = __('user/login.error_user_not_exists');
-
-            return $result;
-        } else if (!$user->first()->status) {
-            $result['error'] = __('user/login.error_access_denied');
-
-            return $result;
+            return;
         }
 
-        /*$last_failed_try_auth = $user->first()->last_failed_try_auth; //TODO: modify it for user_login table
+        $user_login = $this->executeCheckBadUser($ip_address);
 
-        if ($user->first()->numbers_failed_try_auth > 3 && strtotime($last_failed_try_auth) > strtotime('-3 hours')) {
-            $result['error_user_failed_tries_auth'] = __('user/login.error_user_failed_tries_auth');
+        $this->executeValidateUser($email, $password, $user_login, $ip_address);
+    }
 
-            return $result;
-        }*/
+    /**
+     * @param string $ip_address
+     * @param array|Collection $user_login
+     */
+    private function updateFailTry(string $ip_address, array|Collection $user_login) : void
+    {
+        UserLogin::where('ip_address', $ip_address)
+            ->orderByDesc('updated_at')
+            ->limit(1)
+            ->update(['number_of_tries' => ($user_login->first()->number_of_tries + 1)]);
+    }
 
-        $result['can_auth'] = true;
+    /**
+     * @param Collection $user_login
+     * @param string $ip_address
+     * @param string $email
+     */
+    private function updateOrCreateBadUser(Collection $user_login, string $ip_address, string $email) : void
+    {
+        if ($user_login->isNotEmpty()) {
+            $this->updateFailTry($ip_address, $user_login);
+        } else {
+            UserLogin::create([
+                'ip_address' => $ip_address,
+                'email' => $email,
+                'number_of_tries' => 1,
+            ]);
+        }
+    }
 
-        return $result;
+    /**
+     * @param string $email
+     * @param string $password
+     * @param Collection $user_login
+     * @param string $ip_address
+     */
+    private function executeValidateUser(string $email, string $password, Collection $user_login, string $ip_address) : void
+    {
+        $user = User::select(['status', 'password'])
+            ->where('email', $email)
+            ->get();
+
+        if ($user->isNotEmpty() && !(Hash::check($password, $user->first()->password))) {
+            $this->updateOrCreateBadUser($user_login, $ip_address, $email);
+
+            session()->flash('errors', __('user/login.error_user_not_exists'));
+
+            return;
+        }
+
+        if ($user->isEmpty()) {
+            $this->updateOrCreateBadUser($user_login, $ip_address, $email);
+
+            session()->flash('errors', __('user/login.error_user_not_exists'));
+        } else if (!$user->first()->status) {
+            session()->flash('errors', __('user/login.error_access_denied'));
+        } else if ($user->first()->status) {
+            UserLogin::where('ip_address', $ip_address)
+                ->orderByDesc('updated_at')
+                ->limit(1)
+                ->delete();
+        }
+    }
+
+    /**
+     * @param string $ip_address
+     * @return Collection
+     */
+    private function executeCheckBadUser(string $ip_address) : Collection
+    {
+        $user_login = UserLogin::where('ip_address', $ip_address)
+            ->orderByDesc('updated_at')
+            ->limit(1)
+            ->get();
+
+        if ($user_login->first()->number_of_tries >= 3 && strtotime($user_login->first()->updated_at) > strtotime('-3 hour')) {
+            $this->updateFailTry($ip_address, $user_login);
+
+            abort(403, __('user/login.error_user_failed_tries_auth'));
+        }
+
+        return $user_login;
     }
 }

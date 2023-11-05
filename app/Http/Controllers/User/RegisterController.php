@@ -13,24 +13,24 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-    public function index() : Factory|Application|View|\Illuminate\Contracts\Foundation\Application
+    /**
+     * @return View
+     */
+    public function index() : View
     {
         return view('auth.register');
     }
 
     /**
      * @param RegisterRequest $registerRequest
-     * @return RedirectResponse|\Illuminate\Contracts\Foundation\Application|Factory|View|Application
+     * @return RedirectResponse
      */
-    public function register(RegisterRequest $registerRequest) : RedirectResponse|\Illuminate\Contracts\Foundation\Application|Factory|View|Application
+    public function register(RegisterRequest $registerRequest) : RedirectResponse
     {
         $user = User::create($registerRequest->all());
 
         if ($user) {
-            Auth::login($user);
-
-            return redirect()
-                ->intended(route('success_register'));
+            return redirect(route('success_register'));
         }
 
         return back()

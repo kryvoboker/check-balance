@@ -4,15 +4,13 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function index() : Factory|Application|View|\Illuminate\Contracts\Foundation\Application
+    public function index() : View
     {
         return view('auth.login');
     }
@@ -25,7 +23,9 @@ class LoginController extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
+        $has_errors = $request->session()->has('errors');
+
+        if (!$has_errors && Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
             return redirect()
@@ -33,8 +33,14 @@ class LoginController extends Controller
                 ->with(['message_success' => __('user/login.success')]);
         }
 
-        return back()
-            ->withErrors(['errors' => __('user/login.error_user_not_exists')])
-            ->onlyInput('email');
+        if (!$has_errors) {
+            return back()
+                ->withErrors(['errors' => __('user/login.error_user_not_exists')])
+                ->onlyInput('email');
+        } else {
+            return back()
+                ->withErrors(['errors' => $request->session()->get('errors')])
+                ->onlyInput('email');
+        }
     }
 }

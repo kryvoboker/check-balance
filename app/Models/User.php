@@ -3,14 +3,53 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Barryvdh\LaravelIdeHelper\Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\PersonalAccessToken;
 
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $lastname
+ * @property string $telephone
+ * @property string $email
+ * @property bool $status
+ * @property Carbon|null $email_verified_at
+ * @property mixed $password
+ * @property string|null $remember_token
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @property-read Collection<int, PersonalAccessToken> $tokens
+ * @property-read int|null $tokens_count
+ * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static Builder|User newModelQuery()
+ * @method static Builder|User newQuery()
+ * @method static Builder|User query()
+ * @method static Builder|User whereCreatedAt($value)
+ * @method static Builder|User whereEmail($value)
+ * @method static Builder|User whereEmailVerifiedAt($value)
+ * @method static Builder|User whereId($value)
+ * @method static Builder|User whereLastname($value)
+ * @method static Builder|User whereName($value)
+ * @method static Builder|User wherePassword($value)
+ * @method static Builder|User whereRememberToken($value)
+ * @method static Builder|User whereStatus($value)
+ * @method static Builder|User whereTelephone($value)
+ * @method static Builder|User whereUpdatedAt($value)
+ * @mixin Eloquent
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -47,46 +86,5 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'status' => 'boolean',
-        'last_failed_try_auth' => 'datetime:Y-m-d H:i:s',
     ];
-
-    /**
-     * @param string $email
-     * @return Collection
-     */
-    public static function takeUserInfo(string $email) : Collection
-    {
-        return DB::table('users')
-            ->select('numbers_failed_try_auth', 'status')
-            ->where('email', '=', $email)
-            ->get();
-    }
-
-    /**
-     * Interact with the user's first name.
-     * Check this mutator for telephone - https://laravel.com/docs/10.x/eloquent-mutators#defining-a-mutator
-     */
-    protected function telephone(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $telephone) => $this->parseTelephone($telephone),
-            set: fn (string $telephone) => preg_replace(['/^\+38/', '/\D+/'], '', $telephone),
-        );
-    }
-
-    /**
-     * @param string $telephone
-     * @return string
-     */
-    private function parseTelephone(string $telephone) : string
-    {
-        $mask = '+38 (___) ___-__-__';
-        $phone_length = mb_strlen($telephone, 'UTF-8');
-
-        for ($index_number = 0; $index_number < $phone_length; $index_number++) {
-            $mask = preg_replace('/_/', $telephone[$index_number], $mask, 1);
-        }
-
-        return $mask;
-    }
 }
