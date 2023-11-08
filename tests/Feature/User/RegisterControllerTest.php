@@ -17,19 +17,6 @@ class RegisterControllerTest extends TestCase
             ->assertStatus(200);
     }
 
-    public function test_success_register_user()
-    {
-        $user_data = $this->takeUserData();
-
-        $this->post('/register', $user_data)
-            ->assertRedirect(route('success_register'));
-
-        $this->assertDatabaseHas('users', [
-            'email' => 'user@gmail.com'
-        ])
-            ->assertAuthenticatedAs(Auth::user());
-    }
-
     public function test_failure_register_user()
     {
         $user_data = $this->takeUserData();
@@ -40,23 +27,24 @@ class RegisterControllerTest extends TestCase
             ->assertSessionHasErrors(['password']);
 
         $this->assertDatabaseMissing('users', [
-            'email' => 'user1@gmail.com'
+            'email' => 'user1@gmail.com',
         ]);
     }
 
-    public function test_success_register_page_return_success_after_register()
+    public function test_success_register_user()
     {
         $user_data = $this->takeUserData();
 
         $this->post('/register', $user_data)
-            ->assertRedirect(route('success_register'));
+            ->assertRedirectToRoute('success_register')
+            ->assertRedirect();
 
         $this->assertDatabaseHas('users', [
-            'email' => 'user@gmail.com'
-        ])
-            ->assertAuthenticatedAs(Auth::user())
-            ->get('success_register')
-            ->assertStatus(200);
+            'email' => 'user@gmail.com',
+            'status' => 0,
+        ]);
+
+        $this->assertGuest();
     }
 
     /**

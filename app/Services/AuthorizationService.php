@@ -30,9 +30,9 @@ class AuthorizationService
 
     /**
      * @param string $ip_address
-     * @param array|Collection $user_login
+     * @param Collection $user_login
      */
-    private function updateFailTry(string $ip_address, array|Collection $user_login) : void
+    private function updateFailTry(string $ip_address, Collection $user_login) : void
     {
         UserLogin::where('ip_address', $ip_address)
             ->orderByDesc('updated_at')
@@ -103,7 +103,9 @@ class AuthorizationService
             ->limit(1)
             ->get();
 
-        if ($user_login->first()->number_of_tries >= 3 && strtotime($user_login->first()->updated_at) > strtotime('-3 hour')) {
+        $number_of_tries = (int)($user_login->first()->number_of_tries ?? 0);
+
+        if ($number_of_tries >= 3 && strtotime($user_login->first()->updated_at) > strtotime('-3 hour')) {
             $this->updateFailTry($ip_address, $user_login);
 
             abort(403, __('user/login.error_user_failed_tries_auth'));

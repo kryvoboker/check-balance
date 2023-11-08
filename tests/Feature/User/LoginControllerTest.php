@@ -46,6 +46,34 @@ class LoginControllerTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_access_denied_for_bad_user()
+    {
+        $this->createUser();
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'user@gmail.com'
+        ]);
+
+        $user_login_data = [
+            'ip_address' => '127.0.0.1',
+            'email' => 'user@gmail.com',
+            'number_of_tries' => 3,
+        ];
+
+        User\UserLogin::create($user_login_data);
+
+        $this->assertDatabaseHas('user_logins', $user_login_data);
+
+        $this->withServerVariables(['REMOTE_ADDR' => '127.0.0.1'])
+            ->post('login', [
+                'email' => 'user@gmail.com',
+                'password' => 'valid_password_123',
+            ])
+            ->assertForbidden();
+
+        $this->assertGuest();
+    }
+
     /**
      * @return Collection|Model|Authenticatable
      */
