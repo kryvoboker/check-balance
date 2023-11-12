@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Cost\CostTrackingController;
 use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\LogoutController;
@@ -45,3 +46,11 @@ Route::get('logout', [LogoutController::class, 'logout'])
     ->middleware(['auth', 'auth.session'])
     ->name('logout');
 // Logout end
+
+// Check costs start
+Route::resource('costs', CostTrackingController::class)
+    ->parameters([
+        'cost' => 'cost_id',
+    ])
+    ->middleware(['auth', 'auth.session']);
+// Check costs end

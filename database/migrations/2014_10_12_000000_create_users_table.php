@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id()->unsigned();
             $table->string('name');
             $table->string('lastname', 255);
-            $table->string('telephone', 12)->nullable(false)->unique('telephone_indx');
+            $table->string('telephone', 12)
+                ->nullable(false)
+                ->unique('telephone_indx');
+
             $table->string('email')->unique('email_indx');
             $table->boolean('status')->default(false);
             $table->timestamp('email_verified_at')->nullable();

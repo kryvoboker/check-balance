@@ -13,35 +13,31 @@
     @endif
 
     @section('styles')
-        @vite(['resources/assets/css/app.css', 'resources/assets/css/styles.scss'])
+        @vite([
+            'resources/assets/css/icons/font/bootstrap-icons.scss',
+            'resources/assets/css/app.css',
+            'resources/assets/css/styles.scss'
+        ])
     @show
 </head>
 <body>
 
 <div class="wrapper d-flex flex-column">
-    @section('header')
-        <header class="header">
-            <div class="container">
-
-            </div>
-        </header>
-    @show
+    <header class="header">
+        @section('header')
+        @show
+    </header>
 
     <main class="main flex-fill my-5">
-        <div class="container">
-            @section('content')
+        @section('content')
 
-            @show
-        </div>
+        @show
     </main>
 
-    @section('footer')
-        <footer class="footer">
-            <div class="container">
-
-            </div>
-        </footer>
-    @show
+    <footer class="footer">
+        @section('footer')
+        @show
+    </footer>
 </div>
 
 @section('scripts')

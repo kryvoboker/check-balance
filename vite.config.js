@@ -5,6 +5,7 @@ export default defineConfig({
     plugins: [
         laravel({
             input: [
+                'resources/assets/css/icons/font/bootstrap-icons.scss',
                 'resources/assets/css/app.css',
                 'resources/assets/css/styles.scss',
                 'resources/assets/js/app.js',
