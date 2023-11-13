@@ -7,6 +7,7 @@ use App\Models\Cost\CostTracking;
 use App\Http\Requests\Cost\StoreCostTrackingRequest;
 use App\Http\Requests\Cost\UpdateCostTrackingRequest;
 use App\Services\Cost\CostService;
+use Illuminate\Contracts\View\View;
 
 class CostTrackingController extends Controller
 {
@@ -20,7 +21,7 @@ class CostTrackingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index() : View
     {
         $costs_list = $this->cost_service->getCostsList();
 

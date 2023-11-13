@@ -19,14 +19,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::redirect('/', 'login')
-    ->middleware(['web', 'guest', 'auth.session']);
+    ->middleware(['guest', 'auth.session']);
 
 Route::get('/', [HomeController::class, 'index'])
     ->middleware(['auth', 'auth.session'])
     ->name('home');
 
 // Login start
-Route::middleware(['web', 'guest', 'auth.session'])->group(function () {
+Route::middleware(['guest', 'auth.session'])->group(function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');
     Route::post('login', [LoginController::class, 'login'])->name('login');
 });
