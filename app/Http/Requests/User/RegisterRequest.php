@@ -10,7 +10,7 @@ class RegisterRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
+    public function authorize() : bool
     {
         return true;
     }
@@ -27,7 +27,7 @@ class RegisterRequest extends FormRequest
         'telephone' => "string[]",
         'password' => "string[]"
     ])]
-    public function rules(): array
+    public function rules() : array
     {
         return [
             'name' => ['required', 'min:3', 'max:255'],
@@ -51,7 +51,7 @@ class RegisterRequest extends FormRequest
         'password' => "string",
         'confirmed' => "string",
     ])]
-    public function messages(): array
+    public function messages() : array
     {
         return [
             'name' => __('user/validation_register.error_name'),
@@ -61,5 +61,12 @@ class RegisterRequest extends FormRequest
             'password' => __('user/validation_register.error_password'),
             'confirmed' => __('user/validation_register.error_password_confirmation'),
         ];
+    }
+
+    protected function prepareForValidation() : void
+    {
+        $this->merge(
+            ['telephone' => preg_replace(['/^\+38/', '/\D+/'], '', $this->input('telephone'))]
+        );
     }
 }

@@ -20,6 +20,7 @@ class CostTrackingController extends Controller
 
     /**
      * Display a listing of the resource.
+     * @return View
      */
     public function index() : View
     {
@@ -30,10 +31,11 @@ class CostTrackingController extends Controller
 
     /**
      * Show the form for creating a new resource.
+     * @return View
      */
-    public function create()
+    public function create() : View
     {
-        //
+        return view('cost.create');
     }
 
     /**
@@ -41,7 +43,7 @@ class CostTrackingController extends Controller
      */
     public function store(StoreCostTrackingRequest $request)
     {
-        //
+        dd($request);
     }
 
     /**

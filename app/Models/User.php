@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Models\Cost\CostTracking;
 use Barryvdh\LaravelIdeHelper\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -96,5 +97,15 @@ class User extends Authenticatable
     public function costTrackings() : HasMany
     {
         return $this->hasMany(CostTracking::class);
+    }
+
+    /**
+     * Interact with the user's first name.
+     */
+    protected function telephone(): Attribute //TODO: check this mutator for telephone - https://laravel.com/docs/10.x/eloquent-mutators#defining-a-mutator
+    {
+        return Attribute::make(
+            set: fn (string $telephone) => preg_replace(['/^\+38/', '/\D+/'], '', $telephone),
+        );
     }
 }

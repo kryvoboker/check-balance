@@ -1,12 +1,13 @@
 'use strict';
 
 +function () {
-    const findElems = (className: string, context: Document | HTMLElement | HTMLFormElement = document): NodeListOf<HTMLFormElement> | NodeListOf<HTMLElement> | null =>
+    const findElems = (className : string, context : Document | HTMLElement | HTMLFormElement = document) : NodeListOf<HTMLFormElement> | NodeListOf<HTMLElement> | null =>
             context.querySelectorAll(className),
-        addClassName = (className: string, element: HTMLElement): void => element.classList.add(className),
-        arrayFrom = <T>(pseudoArray: ArrayLike<T>): T[] => Array.from(pseudoArray);
+        findElem = (className : string, context : Document | HTMLElement | HTMLFormElement = document) : HTMLElement | null => context.querySelector(className),
+        addClassName = (className : string, element : HTMLElement) : void => element.classList.add(className),
+        arrayFrom = <T>(pseudoArray : ArrayLike<T>) : T[] => Array.from(pseudoArray);
 
-    function validateForms(): void {
+    function validateForms() : void {
         const forms = findElems('.needs-validation');
 
         arrayFrom(forms).forEach(form => {
@@ -25,23 +26,23 @@
         });
     }
 
-    function parsePhone(e: (InputEvent | FocusEvent | MouseEvent), phone: HTMLInputElement) {
+    function parsePhone(e : (InputEvent | FocusEvent | MouseEvent), phone : HTMLInputElement) : void {
         if (e instanceof MouseEvent && e.type === 'click') {
             return;
         }
 
-        let tempValue: string = phone.value.replace(/^\+(38)/g, '').replace(/\D+/g, ''),
-            pattern: string = '+38 (___) ___-__-__';
+        let tempValue : string = phone.value.replace(/^\+(38)/g, '').replace(/\D+/g, ''),
+            pattern : string = '+38 (___) ___-__-__';
 
-        const oldSelectionStart: number = phone.selectionStart;
+        const oldSelectionStart : number = phone.selectionStart;
 
-        const setSelection = (position: number): void => {
+        const setSelection = (position : number) : void => {
             phone.selectionStart = position;
             phone.selectionEnd = position;
         };
 
-        const findPositionSelection = (string: string): number => {
-            let indexLetter: number = 0;
+        const findPositionSelection = (string : string) : number => {
+            let indexLetter : number = 0;
 
             while (typeof string[indexLetter] !== 'undefined' && string[indexLetter] !== '_' && string.length > indexLetter) {
                 indexLetter++;
@@ -50,7 +51,7 @@
             return indexLetter;
         };
 
-        for (let numberIndex: number = 0; numberIndex < tempValue.length; numberIndex++) {
+        for (let numberIndex : number = 0; numberIndex < tempValue.length; numberIndex++) {
             if (typeof tempValue[numberIndex] !== 'undefined') {
                 pattern = pattern.replace(/_/, tempValue[numberIndex]);
             }
@@ -80,14 +81,59 @@
     }
 
     function parsePhoneNumber() {
-        arrayFrom(findElems('input[type=tel]')).forEach((phone: HTMLInputElement) => {
-            phone.addEventListener('input', (e: InputEvent) => parsePhone(e, phone));
-            phone.addEventListener('focus', (e: FocusEvent) => parsePhone(e, phone));
-            phone.addEventListener('blur', (e: FocusEvent) => parsePhone(e, phone));
-            phone.addEventListener('click', (e: MouseEvent) => parsePhone(e, phone));
+        arrayFrom(findElems('input[type=tel]')).forEach((phone : HTMLInputElement) : void => {
+            phone.addEventListener('input', (e : InputEvent) => parsePhone(e, phone));
+            phone.addEventListener('focus', (e : FocusEvent) => parsePhone(e, phone));
+            phone.addEventListener('blur', (e : FocusEvent) => parsePhone(e, phone));
+            phone.addEventListener('click', (e : MouseEvent) => parsePhone(e, phone));
+        });
+    }
+
+    function enableTooltips() : void {
+        const tooltipTriggerList : NodeListOf<HTMLElement> = findElems('[data-bs-toggle="tooltip"]');
+        // @ts-ignore
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    }
+
+    function addCosts() : void {
+        const addCostsBtn : HTMLElement | null = findElem('.costs__add-costs-btn'),
+            inputFieldsPrototypeHtml : HTMLElement | null = findElem('.add-costs-prototype'),
+            blockForAddCost : HTMLElement | null = findElem('.add-costs');
+
+        if (!addCostsBtn || !inputFieldsPrototypeHtml || !blockForAddCost) {
+            return;
+        }
+
+        addCostsBtn.addEventListener('click', () : void => {
+            const inputFields : Node = inputFieldsPrototypeHtml.cloneNode(true);
+
+            blockForAddCost.append(inputFields);
+
+            findElem('.d-none', blockForAddCost)?.classList.remove('d-none', 'add-costs-prototype');
+        });
+    }
+
+    function addDreams() : void {
+        const addDreamsBtn : HTMLElement | null = findElem('.costs__add-dreams-btn'),
+            inputFieldsPrototypeHtml : HTMLElement | null = findElem('.add-dreams-prototype'),
+            blockForAddDreams : HTMLElement | null = findElem('.add-dreams');
+
+        if (!addDreamsBtn || !inputFieldsPrototypeHtml || !blockForAddDreams) {
+            return;
+        }
+
+        addDreamsBtn.addEventListener('click', () : void => {
+            const inputFields : Node = inputFieldsPrototypeHtml.cloneNode(true);
+
+            blockForAddDreams.append(inputFields);
+
+            findElem('.d-none', blockForAddDreams)?.classList.remove('d-none', 'add-dreams-prototype');
         });
     }
 
     validateForms();
     parsePhoneNumber();
+    enableTooltips();
+    addCosts();
+    addDreams();
 }();

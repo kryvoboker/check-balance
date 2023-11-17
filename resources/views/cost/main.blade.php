@@ -4,11 +4,11 @@
     <div class="container">
         <nav class="navbar bg-body-tertiary justify-content-end">
             <div class="main-actions">
-                <button class="btn btn-outline-success create-cost" type="button">
+                <a class="btn btn-outline-success create-cost" href="{{ route('costs.create') }}">
                     <i class="bi bi-plus-circle-fill"></i>
 
                     {{ __('cost/main.create_cost') }}
-                </button>
+                </a>
 
                 <button class="btn btn-outline-danger delete-cost" type="button">
                     <i class="bi bi-trash"></i>

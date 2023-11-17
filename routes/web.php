@@ -19,14 +19,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::redirect('/', 'login')
-    ->middleware(['guest', 'auth.session']);
+    ->middleware(['web', 'guest', 'auth.session']);
 
 Route::get('/', [HomeController::class, 'index'])
-    ->middleware(['auth', 'auth.session'])
+    ->middleware(['web', 'auth', 'auth.session'])
     ->name('home');
 
 // Login start
-Route::middleware(['guest', 'auth.session'])->group(function () {
+Route::middleware(['web', 'guest', 'auth.session'])->group(function () {
     Route::get('login', [LoginController::class, 'index'])->name('login');
     Route::post('login', [LoginController::class, 'login'])->name('login');
 });
@@ -43,7 +43,7 @@ Route::middleware(['web', 'guest', 'auth.session'])->group(function () {
 
 // Logout start
 Route::get('logout', [LogoutController::class, 'logout'])
-    ->middleware(['auth', 'auth.session'])
+    ->middleware(['web', 'auth', 'auth.session'])
     ->name('logout');
 // Logout end
 
@@ -52,5 +52,5 @@ Route::resource('costs', CostTrackingController::class)
     ->parameters([
         'cost' => 'cost_id',
     ])
-    ->middleware(['auth', 'auth.session']);
+    ->middleware(['web', 'auth', 'auth.session']);
 // Check costs end
