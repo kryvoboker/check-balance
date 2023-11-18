@@ -9,6 +9,7 @@ class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
+     * @return bool
      */
     public function authorize() : bool
     {
@@ -25,7 +26,7 @@ class RegisterRequest extends FormRequest
         'lastname' => "string[]",
         'email' => "string[]",
         'telephone' => "string[]",
-        'password' => "string[]"
+        'password' => "string[]",
     ])]
     public function rules() : array
     {
@@ -66,7 +67,7 @@ class RegisterRequest extends FormRequest
     protected function prepareForValidation() : void
     {
         $this->merge(
-            ['telephone' => preg_replace(['/^\+38/', '/\D+/'], '', $this->input('telephone'))]
+            ['telephone' => clearTelephone($this->input('telephone'))]
         );
     }
 }

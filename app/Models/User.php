@@ -105,7 +105,7 @@ class User extends Authenticatable
     protected function telephone(): Attribute //TODO: check this mutator for telephone - https://laravel.com/docs/10.x/eloquent-mutators#defining-a-mutator
     {
         return Attribute::make(
-            set: fn (string $telephone) => preg_replace(['/^\+38/', '/\D+/'], '', $telephone),
+            set: fn (string $telephone) => clearTelephone($telephone),
         );
     }
 }

@@ -26,10 +26,31 @@ class StoreCostTrackingRequest extends FormRequest
     public function rules() : array
     {
         return [
-            'date_range' => ['required'], //TODO: add check the "-" separator
-            'income_funds' => ['required'], //TODO: add check the float value
-            'cost' => ['array', new ValidateAddCost],
-            'dream' => ['array', new ValidateAddDream],
+            'date_range' => ['required', 'regex:/\d+-\d+/'],
+            'income_funds' => ['required', 'numeric'],
+            'cost' => [new ValidateAddCost],
+            'dream' => [new ValidateAddDream],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function messages() : array
+    {
+        return [
+            'date_range.required' => __('cost/create.error_date_range'),
+            'date_range.regex' => __('cost/create.error_date_range_regex'),
+            'income_funds.required' => __('cost/create.error_income_funds'),
+            'income_funds.numeric' => __('cost/create.error_income_funds_numeric'),
+        ];
+    }
+
+    protected function prepareForValidation() : void
+    {
+        $this->merge([
+            'date_range' => trim($this->input('date_range')),
+            'income_funds' => trim($this->input('income_funds')),
+        ]);
     }
 }

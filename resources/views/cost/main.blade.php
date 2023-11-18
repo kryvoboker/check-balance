@@ -24,16 +24,42 @@
     <div class="container">
         <h1>{{ __('cost/main.heading_title') }}</h1>
 
-        <div class="costs-list">
-            @forelse($costs_list as $cost)
-                {!! $cost !!}
-            @empty
-                <div class="alert alert-info d-flex align-items-center gap-2">
-                    <p class="m-0">{{ __('cost/main.empty_list') }}</p>
+        <div class="costs-list"> {{-- //TODO: change it --}}
+            <table class="table table-success table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">user_id</th>
+                    <th scope="col">money_earned</th>
+                    <th scope="col">current_month_day</th>
+                    <th scope="col">next_month_day</th>
+                    <th scope="col">costs</th>
+                    <th scope="col">created_at</th>
+                    <th scope="col">updated_at</th>
+                </tr>
+                </thead>
+                <tbody>
+                @forelse($costs_list as $cost)
+                    <tr>
+                        <th scope="row">{{ $cost->id }}</th>
+                        <td>{{ $cost->user_id }}</td>
+                        <td>{{ $cost->money_earned }}</td>
+                        <td>{{ $cost->current_month_day }}</td>
+                        <td>{{ $cost->next_month_day }}</td>
+                        <td style="max-width: 200px; word-wrap: break-word">{{ $cost->costs }}</td>
+                        <td>{{ $cost->created_at }}</td>
+                        <td>{{ $cost->updated_at }}</td>
+                    </tr>
+                    {{--{!! $cost !!}--}}
+                @empty
+                    <div class="alert alert-info d-flex align-items-center gap-2">
+                        <p class="m-0">{{ __('cost/main.empty_list') }}</p>
 
-                    <button class="btn-close" type="button" data-bs-dismiss="alert"></button>
-                </div>
-            @endforelse
+                        <button class="btn-close" type="button" data-bs-dismiss="alert"></button>
+                    </div>
+                @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 @endsection

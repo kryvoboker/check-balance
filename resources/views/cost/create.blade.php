@@ -14,7 +14,7 @@
     <div class="container">
         @if ($errors->any())
             <div class="alert alert-danger">
-                <ul>
+                <ul class="mb-0">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -37,7 +37,9 @@
                         </button>
                     </label>
 
-                    <input class="form-control" name="date_range" type="text" id="date-range" required>
+                    <input class="form-control"
+                           value="{{ old('date_range') }}"
+                           name="date_range" type="text" id="date-range" required>
                     <div class="invalid-feedback">
                         {{ __('cost/create.error_date_range') }}
                     </div>
@@ -48,7 +50,9 @@
                         {{ __('cost/create.text_income_funds') }}
                     </label>
 
-                    <input class="form-control" type="number" name="income_funds" id="income-funds" required>
+                    <input class="form-control"
+                           value="{{ old('income_funds') }}"
+                           type="number" name="income_funds" id="income-funds" required>
                     <div class="invalid-feedback">
                         {{ __('cost/create.error_income_funds') }}
                     </div>
@@ -102,7 +106,7 @@
             </label>
 
             <div class="col-sm-3">
-                <input class="form-control" type="text" name="cost[total][]" id="cost-total" required>
+                <input class="form-control" type="number" name="cost[total][]" id="cost-total" required>
 
                 <div class="invalid-feedback">
                     {{ __('cost/create.error_cost_total') }}
@@ -134,7 +138,7 @@
             </label>
 
             <div class="col-sm-3">
-                <input class="form-control" type="text" name="dream[total][]" id="dream-total" required>
+                <input class="form-control" type="number" name="dream[total][]" id="dream-total" required>
 
                 <div class="invalid-feedback">
                     {{ __('cost/create.error_dream_total') }}

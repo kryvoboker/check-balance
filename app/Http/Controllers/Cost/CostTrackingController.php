@@ -8,6 +8,7 @@ use App\Http\Requests\Cost\StoreCostTrackingRequest;
 use App\Http\Requests\Cost\UpdateCostTrackingRequest;
 use App\Services\Cost\CostService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class CostTrackingController extends Controller
 {
@@ -24,6 +25,7 @@ class CostTrackingController extends Controller
      */
     public function index() : View
     {
+        //TODO: add process for costs list, prepare date from current day month to next day month
         $costs_list = $this->cost_service->getCostsList();
 
         return view('cost.main', compact('costs_list'));
@@ -40,10 +42,15 @@ class CostTrackingController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
+     * @param StoreCostTrackingRequest $request
+     * @return RedirectResponse
      */
     public function store(StoreCostTrackingRequest $request)
     {
-        dd($request);
+        $this->cost_service->saveCost(collect($request->all()));
+
+        return redirect()->intended(route('costs.index'));
     }
 
     /**

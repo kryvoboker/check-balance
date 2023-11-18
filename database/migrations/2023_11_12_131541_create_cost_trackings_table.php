@@ -25,7 +25,9 @@ return new class extends Migration
                 ->nullable(false)
                 ->default(15);
 
-            $table->json('costs')->nullable(false);
+            $table->json('costs')
+                ->default('')
+                ->nullable(false);
 
             $table->timestamps();
         });
