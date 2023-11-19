@@ -17,13 +17,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
             $table->float('money_earned')->nullable(false);
-            $table->unsignedTinyInteger('current_month_day')
-                ->nullable(false)
-                ->default(15);
+            $table->timestamp('current_month_day')
+                ->default(DB::raw('current_timestamp'));
 
-            $table->unsignedTinyInteger('next_month_day')
-                ->nullable(false)
-                ->default(15);
+            $table->timestamp('next_month_day')
+                ->default(DB::raw('current_timestamp'));
 
             $table->json('costs')
                 ->default('')

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Cost\CostTrackingController;
-use App\Http\Controllers\User\HomeController;
 use App\Http\Controllers\User\LoginController;
 use App\Http\Controllers\User\LogoutController;
 use App\Http\Controllers\User\RegisterController;
@@ -21,9 +20,12 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', 'login')
     ->middleware(['web', 'guest', 'auth.session']);
 
-Route::get('/', [HomeController::class, 'index'])
+Route::redirect('/', 'costs.index')
+    ->middleware(['web', 'auth', 'auth.session']);
+
+/*Route::get('/', [HomeController::class, 'index'])
     ->middleware(['web', 'auth', 'auth.session'])
-    ->name('home');
+    ->name('home');*/
 
 // Login start
 Route::middleware(['web', 'guest', 'auth.session'])->group(function () {
@@ -49,8 +51,5 @@ Route::get('logout', [LogoutController::class, 'logout'])
 
 // Check costs start
 Route::resource('costs', CostTrackingController::class)
-    ->parameters([
-        'cost' => 'cost_id',
-    ])
     ->middleware(['web', 'auth', 'auth.session']);
 // Check costs end

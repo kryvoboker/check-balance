@@ -13,7 +13,9 @@ class CostService
      */
     public function getCostsList() : array|Collection
     {
-        $costs = CostTracking::orderByDesc('created_at')->get();
+        $costs = CostTracking::select(['id', 'user_id', 'money_earned', 'current_month_day', 'next_month_day'])
+            ->where('user_id', Auth::id())
+            ->orderByDesc('created_at')->get();
 
         return ($costs->isNotEmpty() ? $costs : []);
     }

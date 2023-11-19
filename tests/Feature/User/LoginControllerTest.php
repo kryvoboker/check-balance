@@ -28,7 +28,7 @@ class LoginControllerTest extends TestCase
             'email' => 'user@gmail.com',
             'password' => 'valid_password_123',
         ])
-            ->assertRedirectToRoute('home');
+            ->assertRedirectToRoute('costs.index');
 
         $this->assertAuthenticatedAs($user);
     }

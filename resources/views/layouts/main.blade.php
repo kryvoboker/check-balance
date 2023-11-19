@@ -25,6 +25,29 @@
 <div class="wrapper d-flex flex-column">
     <header class="header">
         @section('header')
+            <div class="container">
+                <nav class="navbar bg-body-tertiary justify-content-end">
+                    <div class="main-actions">
+                        @if(isset($current_route_name) and $current_route_name == 'costs.index')
+                            <a class="btn btn-outline-success create-cost" href="{{ route('costs.create') }}">
+                                <i class="bi bi-plus-circle-fill"></i>
+
+                                {{ __('cost/main.create_cost') }}
+                            </a>
+
+                            <button class="btn btn-outline-danger delete-cost" type="button">
+                                <i class="bi bi-trash"></i>
+
+                                {{ __('cost/main.delete_cost') }}
+                            </button>
+                        @endif
+
+                        <a href="{{ route('logout') }}" class="btn btn-outline-danger">
+                            {{ __('common/header.text_logout') }}
+                        </a>
+                    </div>
+                </nav>
+            </div>
         @show
     </header>
 

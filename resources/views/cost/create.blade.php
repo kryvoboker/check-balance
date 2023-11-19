@@ -3,6 +3,8 @@
 @section('title', __('cost/create.heading_title'))
 
 @section('header')
+    @parent
+
     <div class="container">
         <div class="header__top">
             <h1 class="fs-1">{{ __('cost/create.heading_title') }}</h1>

@@ -29,7 +29,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
 
             return redirect()
-                ->intended(route('home'))
+                ->intended(route('costs.index'))
                 ->with(['message_success' => __('user/login.success')]);
         }
 
