@@ -2,7 +2,7 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\ShareCurrentRouteName;
+use App\Http\Middleware\ShareCurrentRouteInfoInViews;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -38,7 +38,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
 
-            ShareCurrentRouteName::class,
+            ShareCurrentRouteInfoInViews::class,
         ],
 
         'api' => [

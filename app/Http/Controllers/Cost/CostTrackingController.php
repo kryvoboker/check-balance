@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Cost;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Cost\ShowCostTrackingRequest;
 use App\Models\Cost\CostTracking;
 use App\Http\Requests\Cost\StoreCostTrackingRequest;
 use App\Http\Requests\Cost\UpdateCostTrackingRequest;
 use App\Services\Cost\CostService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class CostTrackingController extends Controller
 {
@@ -25,7 +27,6 @@ class CostTrackingController extends Controller
      */
     public function index() : View
     {
-        //TODO: add process for costs list, prepare date from current day month to next day month
         $costs_list = $this->cost_service->getCostsList();
 
         return view('cost.main', compact('costs_list'));
@@ -46,7 +47,7 @@ class CostTrackingController extends Controller
      * @param StoreCostTrackingRequest $request
      * @return RedirectResponse
      */
-    public function store(StoreCostTrackingRequest $request)
+    public function store(StoreCostTrackingRequest $request) : RedirectResponse
     {
         $this->cost_service->saveCost(collect($request->all()));
 
@@ -55,10 +56,19 @@ class CostTrackingController extends Controller
 
     /**
      * Display the specified resource.
+     *
+     * @param ShowCostTrackingRequest $request
+     * @return View
      */
-    public function show(CostTracking $costTracking)
+    public function show(ShowCostTrackingRequest $request) : View
     {
-        //
+        $cost_info = $this->cost_service->processCostInfo(
+            $request->getCostTracking()
+        );
+
+
+
+        return view('cost.show', compact('cost_info'));
     }
 
     /**

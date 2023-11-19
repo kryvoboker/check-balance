@@ -8,7 +8,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\Response;
 
-class ShareCurrentRouteName
+class ShareCurrentRouteInfoInViews
 {
     /**
      * Handle an incoming request.
@@ -24,6 +24,12 @@ class ShareCurrentRouteName
 
         if ($current_route instanceof Route) {
             $current_route_name = $current_route->getName();
+
+            $params = $current_route->parameters();
+
+            if (isset($params['cost'])) {
+                View::share(['cost_id' => $params['cost']]);
+            }
         }
 
         View::share(compact('current_route_name'));

@@ -71,7 +71,7 @@ class CostTracking extends Model
     protected function currentMonthDay() : Attribute
     {
         return Attribute::make(
-            set: fn (int $current_month_day) => date('Y-m') . '-' . $current_month_day
+            set : fn(int $current_month_day) => date('Y-m') . '-' . $current_month_day
         );
     }
 
@@ -81,7 +81,18 @@ class CostTracking extends Model
     protected function nextMonthDay() : Attribute
     {
         return Attribute::make(
-            set: fn (int $next_month_day) => date('Y-m', strtotime('+1 month')) . '-' . $next_month_day
+            set : fn(int $next_month_day) => date('Y-m', strtotime('+1 month')) . '-' . $next_month_day
+        );
+    }
+
+    /**
+     * @return Attribute
+     */
+    protected function costs() : Attribute
+    {
+        return Attribute::make(
+            get : fn(string $json_costs) => json_decode($json_costs, true),
+            set : fn(array $costs) => json_encode($costs)
         );
     }
 }

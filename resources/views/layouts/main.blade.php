@@ -42,6 +42,13 @@
                             </button>
                         @endif
 
+                        @isset($cost_id)
+                            <a href="{{ route('costs.edit', ['cost' => $cost_id]) }}" class="btn btn-outline-info">
+                                <i class="bi bi-pencil-fill"></i>
+                                <span>{{ __('cost/show.text_edit_cost') }}</span>
+                            </a>
+                        @endisset
+
                         <a href="{{ route('logout') }}" class="btn btn-outline-danger">
                             {{ __('common/header.text_logout') }}
                         </a>
