@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'heading_title'                 => 'Список витрат з %s по %s',
+    'heading_title'                 => 'Список витрат з :start по :end',
 
     'text_edit_cost'                => 'Редагувати',
 

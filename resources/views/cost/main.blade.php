@@ -40,7 +40,7 @@
                         <th scope="row">{{ $cost->id }}</th>
                         <td>{{ $cost->user_id }}</td>
                         <td>{{ $cost->money_earned }}</td>
-                        <td>{{ $cost->current_month_day }}</td>
+                        <td>{{ $cost->start_month_day }}</td>
                         <td>{{ $cost->next_month_day }}</td>
                         <td>
                             <a class="btn btn-warning" href="{{ route('costs.edit', ['cost' => $cost->id]) }}">

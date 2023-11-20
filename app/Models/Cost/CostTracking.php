@@ -18,7 +18,7 @@ use Illuminate\Support\Carbon;
  * @property int $id
  * @property int $user_id
  * @property float $money_earned
- * @property int $current_month_day
+ * @property int $start_month_day
  * @property int $next_month_day
  * @property string $costs
  * @property Carbon|null $created_at
@@ -44,9 +44,13 @@ class CostTracking extends Model
     protected $fillable = [
         'user_id',
         'money_earned',
-        'current_month_day',
+        'start_month_day',
         'next_month_day',
         'costs',
+    ];
+
+    protected $casts = [
+        'money_earned' => 'float'
     ];
 
     /**
@@ -71,7 +75,7 @@ class CostTracking extends Model
     protected function currentMonthDay() : Attribute
     {
         return Attribute::make(
-            set : fn(int $current_month_day) => date('Y-m') . '-' . $current_month_day
+            set : fn(int $start_month_day) => date('Y-m') . '-' . $start_month_day
         );
     }
 

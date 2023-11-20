@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
             $table->float('money_earned')->nullable(false);
-            $table->timestamp('current_month_day')
+            $table->timestamp('start_month_day')
                 ->default(DB::raw('current_timestamp'));
 
             $table->timestamp('next_month_day')

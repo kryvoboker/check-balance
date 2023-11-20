@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('/', 'login')
     ->middleware(['web', 'guest', 'auth.session']);
 
-Route::redirect('/', 'costs.index')
+Route::redirect('/', 'costs')
     ->middleware(['web', 'auth', 'auth.session']);
 
 /*Route::get('/', [HomeController::class, 'index'])
