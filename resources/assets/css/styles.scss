@@ -14,3 +14,30 @@
         padding: 0 3px;
     }
 }
+
+.show-costs-list {
+    &__num {
+        width: 50px;
+    }
+
+    &__date,
+    &__limit-per-day {
+        width: 115px;
+    }
+}
+
+button[aria-expanded=false] {
+    & > span:last-child {
+        display: none;
+    }
+}
+
+button[aria-expanded=true] {
+    & > span:first-child {
+        display: none;
+    }
+
+    & > span:last-child {
+        display: block;
+    }
+}

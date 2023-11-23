@@ -15,7 +15,7 @@ class CostService
      */
     public function getCostsList() : Collection
     {
-        return CostTracking::select(['id', 'user_id', 'money_earned', 'current_month_day', 'next_month_day'])
+        return CostTracking::select(['id', 'user_id', 'money_earned', 'start_month_day', 'next_month_day'])
             ->where('user_id', Auth::id())
             ->orderByDesc('created_at')->get();
     }
@@ -59,14 +59,14 @@ class CostService
 
         $current_date = CarbonImmutable::now(config('app.timezone'));
 
-        $parsed_start_date = Carbon::parse($cost_info->start_month_day);
-        $parsed_end_date = Carbon::parse($cost_info->next_month_day);
+        $parsed_start_date = CarbonImmutable::parse($cost_info->start_month_day);
+        $parsed_end_date = CarbonImmutable::parse($cost_info->next_month_day);
 
         $data->put('end_date', $cost_info->next_month_day);
         $data->put('start_date', $cost_info->start_month_day);
 
-        $this->processLimitMoneysOnEachDay($parsed_start_date, $parsed_end_date, $current_date, $data, $cost_info->money_earned); // TODO: dev it
-        $this->processDatePeriod($parsed_start_date, $parsed_end_date, $current_date, $data);
+//        $this->processLimitMoneysOnEachDay($parsed_start_date, $parsed_end_date, $current_date, $data, $cost_info->money_earned); // TODO: dev it
+        $this->processDatePeriod($parsed_start_date, $parsed_end_date, $data, $cost_info->money_earned);
 
         return $data;
     }
@@ -75,7 +75,8 @@ class CostService
      * @param Carbon $parsed_start_date
      * @param Carbon $parsed_end_date
      * @param CarbonImmutable $current_date
-     * @param Collection $dates
+     * @param Collection $data
+     * @param float $money_earned
      * @return void
      */
     private function processLimitMoneysOnEachDay(Carbon $parsed_start_date, Carbon $parsed_end_date, CarbonImmutable $current_date, Collection &$data, float $money_earned) : void
@@ -119,7 +120,7 @@ class CostService
      * @param CarbonImmutable $current_date
      * @param Collection $data
      */
-    private function processDatePeriod(Carbon $parsed_start_date, Carbon $parsed_end_date, CarbonImmutable $current_date, Collection &$data) : void
+    private function processDatePeriod(CarbonImmutable $parsed_start_date, CarbonImmutable $parsed_end_date, Collection $data, float|int $money_earned) : void
     {
         $dates = [];
 
@@ -129,10 +130,10 @@ class CostService
 
         $count_days = 0;
 
-        $days_in_current_month = ($days_from_db_for_start_month - $start_day);
+        $left_days_in_start_month = ($days_from_db_for_start_month - $start_day);
 
-        for ($day_index = 0; $day_index <= $days_in_current_month; $day_index++) {
-            $dates[$count_days] = $current_date->add($count_days, 'days')->toDateString();
+        for ($day_index = 0; $day_index <= $left_days_in_start_month; $day_index++) {
+            $dates[$count_days]['date'] = $parsed_start_date->add($count_days, 'days')->toDateString();
 
             $count_days++;
         }
@@ -140,9 +141,37 @@ class CostService
         $count_days--;
 
         for ($day_index = 0; $day_index <= $days_from_db_for_next_month; $day_index++) {
-            $dates[$count_days] = $current_date->add($count_days, 'days')->toDateString();
+            $dates[$count_days]['date'] = $parsed_start_date->add($count_days, 'days')->toDateString();
 
             $count_days++;
+        }
+
+        $total_days = count($dates);
+
+        $data->put('money_limit_per_day', round($money_earned / $total_days, 2) . ' ' . __('cost/show.text_currency_value'));
+
+
+
+
+
+        $current_date_obj = CarbonImmutable::now(config('app.timezone'));
+        $current_date = $current_date_obj->toDateString();
+
+        $total_days_left = 0;
+
+        foreach ($dates as $date) {
+            if ($date['date'] >= $current_date) {
+                $total_days_left++;
+            }
+        }
+
+        // TODO: need to calc $money_earned - total_costs
+        $money_limit_per_left_days = round($money_earned / $total_days_left, 2) . ' ' . __('cost/show.text_currency_value');
+
+        foreach ($dates as &$date) {
+            if ($date['date'] >= $current_date) {
+                $date['money_limit_per_left_day'] = $money_limit_per_left_days;
+            }
         }
 
         $data->put('dates', $dates);

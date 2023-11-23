@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('title', __(
-            'cost/show.heading_title',
+            'cost/edit.heading_title',
             ['start' => $cost_info->get('start_date'), 'end' => $cost_info->get('end_date')]
 ))
 
@@ -9,21 +9,21 @@
     <div class="container">
         <h1 class="mb-5">
             {{ __(
-                'cost/show.heading_title',
+                'cost/edit.heading_title',
                 ['start' => $cost_info->get('start_date'), 'end' => $cost_info->get('end_date')]
             ) }}
         </h1>
 
-        <div class="show-costs-list">
+        <div class="edit-costs-list">
             @if($cost_info->has('dates'))
                 <table class="table table-success table-striped table-bordered">
                     <thead>
                     <tr>
                         <th class="show-costs-list__num" scope="col">#</th>
-                        <th class="show-costs-list__date" scope="col">{{ __('cost/show.text_date') }}</th>
-                        <th class="show-costs-list__limit-per-day" scope="col">{{ __('cost/show.text_limit_per_day') }}</th>
-                        <th class="show-costs-list__limit-per-day" scope="col">{{ __('cost/show.text_limit_per_left_day') }}</th>
-                        <th scope="col">{{ __('cost/show.text_costs') }}</th>
+                        <th class="show-costs-list__date" scope="col">{{ __('cost/edit.text_date') }}</th>
+                        <th class="show-costs-list__limit-per-day" scope="col">{{ __('cost/edit.text_limit_per_day') }}</th>
+                        <th class="show-costs-list__limit-per-day" scope="col">{{ __('cost/edit.text_limit_per_left_day') }}</th>
+                        <th scope="col">{{ __('cost/edit.text_costs') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -42,8 +42,8 @@
                                                     data-bs-target="#collapse-costs-{{ $loop->iteration }}"
                                                     aria-expanded="false"
                                                     aria-controls="collapse-costs">
-                                                <span>{{ __('cost/show.text_show_costs') }}</span>
-                                                <span>{{ __('cost/show.text_hide_costs') }}</span>
+                                                <span>{{ __('cost/edit.text_edit_costs') }}</span>
+                                                <span>{{ __('cost/edit.text_hide_costs') }}</span>
                                             </button>
                                         </h2>
                                         <div id="collapse-costs-{{ $loop->iteration }}" class="accordion-collapse collapse"
@@ -61,7 +61,7 @@
                 </table>
             @else
                 <div class="alert alert-danger">
-                    {{ __('cost/show.error_some_error_dates') }}
+                    {{ __('cost/edit.error_some_error_dates') }}
                 </div>
             @endif
         </div>

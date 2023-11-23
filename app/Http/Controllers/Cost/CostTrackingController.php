@@ -66,17 +66,22 @@ class CostTrackingController extends Controller
             $request->getCostTracking()
         );
 
-
-
         return view('cost.show', compact('cost_info'));
     }
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * @param CostTracking $costTracking
+     * @return View
      */
-    public function edit(CostTracking $costTracking)
+    public function edit(CostTracking $costTracking) : View // TODO: dev it method like show
     {
-        //
+        $cost_info = $this->cost_service->processCostInfo(
+            $costTracking
+        );
+
+        return view('cost.edit', compact('cost_info'));
     }
 
     /**

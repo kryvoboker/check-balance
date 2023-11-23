@@ -9,7 +9,7 @@ return [
     'text_limit_per_left_day'       => 'Кінцевий ліміт в день',
     'text_costs'                    => 'Витрати',
     'text_currency_value'           => 'грн',
-    'text_show_costs'               => 'Показати витрати',
+    'text_edit_costs'               => 'Показати витрати',
     'text_hide_costs'               => 'Сховати витрати',
 
     'error_user'                    => 'Ви не можете переглянути цю сторінку!',
