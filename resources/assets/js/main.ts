@@ -95,21 +95,30 @@
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     }
 
-    function addCosts() : void {
-        const addCostsBtn : HTMLElement | null = findElem('.costs__add-costs-btn'),
-            inputFieldsPrototypeHtml : HTMLElement | null = findElem('.add-costs-prototype'),
-            blockForAddCost : HTMLElement | null = findElem('.add-costs');
-
-        if (!addCostsBtn || !inputFieldsPrototypeHtml || !blockForAddCost) {
-            return;
-        }
-
+    function processInsertCostPrototype(addCostsBtn : HTMLElement, blockForAddCost : HTMLElement, inputFieldsPrototypeHtml : HTMLElement) {
         addCostsBtn.addEventListener('click', () : void => {
             const inputFields : Node = inputFieldsPrototypeHtml.cloneNode(true);
 
             blockForAddCost.append(inputFields);
 
             findElem('.d-none', blockForAddCost)?.classList.remove('d-none', 'add-costs-prototype');
+        });
+    }
+
+    function addCosts() : void {
+        const inputFieldsPrototypeHtml : HTMLElement | null = findElem('.add-costs-prototype'),
+            blocksForAddCost : NodeListOf<HTMLElement> | null = findElems('.add-costs');
+
+        if (!inputFieldsPrototypeHtml || !blocksForAddCost.length) {
+            return;
+        }
+
+        arrayFrom(blocksForAddCost).forEach(blockForAddCost => {
+            const addCostsBtn : HTMLElement | null = findElem('.costs__add-costs-btn', blockForAddCost);
+
+            if (addCostsBtn) {
+                processInsertCostPrototype(addCostsBtn, blockForAddCost, inputFieldsPrototypeHtml);
+            }
         });
     }
 

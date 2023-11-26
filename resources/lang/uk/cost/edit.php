@@ -11,6 +11,7 @@ return [
     'text_currency_value'           => 'грн',
     'text_edit_costs'               => 'Показати витрати',
     'text_hide_costs'               => 'Сховати витрати',
+    'text_edit_update'              => 'Оновити',
 
     'error_user'                    => 'Ви не можете переглянути цю сторінку!',
     'error_some_error_dates'        => 'Упс... Сталася якась непередбачувана помилка!',

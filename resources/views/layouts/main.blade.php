@@ -42,12 +42,19 @@
                             </button>
                         @endif
 
-                        @isset($cost_id)
-                            <a href="{{ route('costs.edit', ['cost' => $cost_id]) }}" class="btn btn-outline-info">
-                                <i class="bi bi-pencil-fill"></i>
-                                <span>{{ __('cost/show.text_edit_cost') }}</span>
-                            </a>
-                        @endisset
+                        @if(isset($cost_id) and isset($current_route_name))
+                            @if($current_route_name == 'costs.show')
+                                <a href="{{ route('costs.edit', ['cost' => $cost_id]) }}" class="btn btn-outline-info">
+                                    <i class="bi bi-pencil-fill"></i>
+                                    <span>{{ __('cost/show.text_edit_cost') }}</span>
+                                </a>
+                            @elseif($current_route_name == 'costs.edit')
+                                    <button class="btn btn-outline-info" type="submit" form="edit-cost-form">
+                                        <i class="fa-solid fa-floppy-disk"></i>
+                                        <span>{{ __('cost/edit.text_edit_update') }}</span>
+                                    </button>
+                            @endif
+                        @endif
 
                         <a href="{{ route('logout') }}" class="btn btn-outline-danger">
                             {{ __('common/header.text_logout') }}

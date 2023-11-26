@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Cost;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Cost\EditCostTrackingRequest;
 use App\Http\Requests\Cost\ShowCostTrackingRequest;
 use App\Models\Cost\CostTracking;
 use App\Http\Requests\Cost\StoreCostTrackingRequest;
@@ -75,10 +76,10 @@ class CostTrackingController extends Controller
      * @param CostTracking $costTracking
      * @return View
      */
-    public function edit(CostTracking $costTracking) : View // TODO: dev it method like show
+    public function edit(EditCostTrackingRequest $request) : View
     {
         $cost_info = $this->cost_service->processCostInfo(
-            $costTracking
+            $request->getCostTracking()
         );
 
         return view('cost.edit', compact('cost_info'));
@@ -86,10 +87,20 @@ class CostTrackingController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param UpdateCostTrackingRequest $request
+     * @return RedirectResponse
      */
-    public function update(UpdateCostTrackingRequest $request, CostTracking $costTracking)
+    public function update(UpdateCostTrackingRequest $request) : RedirectResponse
     {
-        //
+        $cost_tracking = $request->getCostTracking();
+
+        $this->cost_service->updateCost(
+            $cost_tracking,
+            $request->collect()
+        );
+
+        return redirect(route('costs.show', ['cost' => $cost_tracking->id]));
     }
 
     /**

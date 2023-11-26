@@ -50,23 +50,40 @@ class CostService
     }
 
     /**
-     * @param CostTracking $cost_info
+     * @param CostTracking $cost_tracking
+     * @param Collection $request_inputs
+     * @return void
+     */
+    public function updateCost(CostTracking $cost_tracking, Collection $request_inputs) : void
+    {
+//        $cost_tracking->money_earned = $request_inputs->get('money_earned'); // TODO: need will to add the money earned input field for change it
+        $cost_tracking->costs = $request_inputs->get('cost');
+
+        $cost_tracking->save();
+
+        /*if ($request_inputs->has('dream')) { // TODO: need to dev the functional for update dreams table
+
+        }*/
+    }
+
+    /**
+     * @param CostTracking $cost_tracking
      * @return Collection
      */
-    public function processCostInfo(CostTracking $cost_info) : Collection
+    public function processCostInfo(CostTracking $cost_tracking) : Collection
     {
         $data = collect();
 
         $current_date = CarbonImmutable::now(config('app.timezone'));
 
-        $parsed_start_date = CarbonImmutable::parse($cost_info->start_month_day);
-        $parsed_end_date = CarbonImmutable::parse($cost_info->next_month_day);
+        $parsed_start_date = CarbonImmutable::parse($cost_tracking->start_month_day);
+        $parsed_end_date = CarbonImmutable::parse($cost_tracking->next_month_day);
 
-        $data->put('end_date', $cost_info->next_month_day);
-        $data->put('start_date', $cost_info->start_month_day);
+        $data->put('end_date', $cost_tracking->next_month_day);
+        $data->put('start_date', $cost_tracking->start_month_day);
 
 //        $this->processLimitMoneysOnEachDay($parsed_start_date, $parsed_end_date, $current_date, $data, $cost_info->money_earned); // TODO: dev it
-        $this->processDatePeriod($parsed_start_date, $parsed_end_date, $data, $cost_info->money_earned);
+        $this->processDatePeriod($parsed_start_date, $parsed_end_date, $data, $cost_tracking->money_earned);
 
         return $data;
     }

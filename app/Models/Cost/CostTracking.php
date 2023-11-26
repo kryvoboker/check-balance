@@ -96,7 +96,7 @@ class CostTracking extends Model
     {
         return Attribute::make(
             get : fn(string $json_costs) => json_decode($json_costs, true),
-            set : fn(array $costs) => json_encode($costs)
+            set : fn(?array $costs) => json_encode(($costs ?? []))
         );
     }
 }

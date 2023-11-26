@@ -20,9 +20,10 @@ class ValidateAddCost implements ValidationRule
         $error_not_array_message = $this->isArrayValue($value);
         $error_empty_name_message = $this->isEmptyName(($value['name'] ?? null));
         $error_empty_total_message = $this->isEmptyTotal(($value['total'] ?? null));
+        $error_empty_date_message = $this->isEmptyDate(($value['date'] ?? null));
 
-        if ($error_not_array_message || $error_empty_total_message || $error_empty_total_message) {
-            $fail(($error_not_array_message ?: $error_empty_name_message ?: $error_empty_total_message));
+        if ($error_not_array_message || $error_empty_total_message || $error_empty_total_message || $error_empty_date_message) {
+            $fail(($error_not_array_message ?: $error_empty_name_message ?: $error_empty_total_message ?: $error_empty_date_message));
 
             return;
         }
@@ -45,7 +46,16 @@ class ValidateAddCost implements ValidationRule
      */
     private function isEmptyTotal(?array $total) : string
     {
-        return (empty($total) && $total != 0 ? __('cost/create.error_cost_total') : '');
+        return (empty($total) ? __('cost/create.error_cost_total') : '');
+    }
+
+    /**
+     * @param array|null $date
+     * @return string
+     */
+    private function isEmptyDate(?array $date) : string
+    {
+        return (empty($date) ? __('cost/create.error_cost_date') : '');
     }
 
     /**
@@ -78,6 +88,8 @@ class ValidateAddCost implements ValidationRule
                 $fail(__('cost/create.error_cost_some_numeric'));
 
                 break;
+            } else if (empty($value['date'][$name_index])) {
+                $fail(__('cost/create.error_cost_some_date'));
             }
         }
     }

@@ -15,12 +15,14 @@
 @section('content')
     <div class="container">
         @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger d-flex gap-3">
                 <ul class="mb-0">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
+
+                <button class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
@@ -87,37 +89,7 @@
         </form>
     </div>
 
-    <div class="d-none row gap-3 mb-3 add-costs-prototype">
-        <div class="row">
-            <label class="col-sm-2 col-form-label" for="cost-name">
-                {{ __('cost/create.text_cost_name') }}
-            </label>
-
-            <div class="col-sm-3">
-                <input class="form-control" type="text" name="cost[name][]" id="cost-name" required>
-
-                <div class="invalid-feedback">
-                    {{ __('cost/create.error_cost_name') }}
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <label class="col-sm-2 col-form-label" for="cost-total">
-                {{ __('cost/create.text_cost_total') }}
-            </label>
-
-            <div class="col-sm-3">
-                <input class="form-control" type="number" name="cost[total][]" id="cost-total" required>
-
-                <div class="invalid-feedback">
-                    {{ __('cost/create.error_cost_total') }}
-                </div>
-            </div>
-        </div>
-
-        <hr/>
-    </div>
+    @include('partials.add_cost_prototype')
 
     <div class="d-none row gap-3 mb-3 add-dreams-prototype">
         <div class="row">
