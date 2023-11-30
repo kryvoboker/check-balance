@@ -18,14 +18,16 @@ class ValidateAddCost implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail) : void
     {
         $error_not_array_message = $this->isArrayValue($value);
-        $error_empty_name_message = $this->isEmptyName(($value['name'] ?? null));
-        $error_empty_total_message = $this->isEmptyTotal(($value['total'] ?? null));
-        $error_empty_date_message = $this->isEmptyDate(($value['date'] ?? null));
 
-        if ($error_not_array_message || $error_empty_total_message || $error_empty_total_message || $error_empty_date_message) {
-            $fail(($error_not_array_message ?: $error_empty_name_message ?: $error_empty_total_message ?: $error_empty_date_message));
+        foreach ($value as $date_info) {
+            $error_empty_name_message = $this->isEmptyName(($date_info['name'] ?? null));
+            $error_empty_total_message = $this->isEmptyTotal(($date_info['total'] ?? null));
 
-            return;
+            if ($error_not_array_message || $error_empty_total_message || $error_empty_total_message) {
+                $fail(($error_not_array_message ?: $error_empty_name_message ?: $error_empty_total_message));
+
+                return;
+            }
         }
 
         $this->checkOtherErrors($value, $fail);
@@ -50,15 +52,6 @@ class ValidateAddCost implements ValidationRule
     }
 
     /**
-     * @param array|null $date
-     * @return string
-     */
-    private function isEmptyDate(?array $date) : string
-    {
-        return (empty($date) ? __('cost/create.error_cost_date') : '');
-    }
-
-    /**
      * @param mixed $value
      * @return string
      */
@@ -73,23 +66,23 @@ class ValidateAddCost implements ValidationRule
      */
     private function checkOtherErrors(array $value, Closure $fail) : void
     {
-        $cost_names_length = count($value['name']);
+        foreach ($value as $date_info) {
+            $cost_names_length = count($date_info['name']);
 
-        for ($name_index = 0; $name_index < $cost_names_length; $name_index++) {
-            if (empty($value['name'][$name_index])) {
-                $fail(__('cost/create.error_cost_some_name'));
+            for ($name_index = 0; $name_index < $cost_names_length; $name_index++) {
+                if (empty($date_info['name'][$name_index])) {
+                    $fail(__('cost/create.error_cost_some_name'));
 
-                break;
-            } else if (!isset($value['total'][$name_index]) || (empty($value['total'][$name_index]) && $value['total'][$name_index] != 0)) {
-                $fail(__('cost/create.error_cost_some_total'));
+                    break;
+                } else if (!isset($date_info['total'][$name_index]) || (empty($date_info['total'][$name_index]) && $date_info['total'][$name_index] != 0)) {
+                    $fail(__('cost/create.error_cost_some_total'));
 
-                break;
-            } else if (!is_numeric($value['total'][$name_index])) {
-                $fail(__('cost/create.error_cost_some_numeric'));
+                    break;
+                } else if (!is_numeric($date_info['total'][$name_index])) {
+                    $fail(__('cost/create.error_cost_some_numeric'));
 
-                break;
-            } else if (empty($value['date'][$name_index])) {
-                $fail(__('cost/create.error_cost_some_date'));
+                    break;
+                }
             }
         }
     }

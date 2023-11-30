@@ -72,7 +72,7 @@ class CostTracking extends Model
     /**
      * @return Attribute
      */
-    protected function currentMonthDay() : Attribute
+    protected function startMonthDay() : Attribute
     {
         return Attribute::make(
             set : fn(int $start_month_day) => date('Y-m') . '-' . $start_month_day

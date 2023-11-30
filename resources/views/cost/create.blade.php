@@ -63,15 +63,6 @@
                 </div>
             </div>
 
-            <div class="d-flex flex-column gap-3 col-12 add-costs">
-                <button type="button" class="btn btn-success costs__add-costs-btn col-2">
-                    <i class="bi bi-plus-circle"></i>
-                    <span class="ms-2">
-                        {{ __('cost/create.text_add_costs_btn') }}
-                    </span>
-                </button>
-            </div>
-
             <div class="d-flex flex-column gap-3 col-12 add-dreams">
                 <button type="button" class="btn btn-warning costs__add-dreams-btn col-2">
                     <i class="bi bi-plus-circle"></i>
@@ -88,8 +79,6 @@
             </div>
         </form>
     </div>
-
-    @include('partials.add_cost_prototype')
 
     <div class="d-none row gap-3 mb-3 add-dreams-prototype">
         <div class="row">

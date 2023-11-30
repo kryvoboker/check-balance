@@ -73,7 +73,7 @@ class CostTrackingController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param CostTracking $costTracking
+     * @param EditCostTrackingRequest $request
      * @return View
      */
     public function edit(EditCostTrackingRequest $request) : View

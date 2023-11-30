@@ -33,9 +33,10 @@ class CostService
         $data['start_month_day'] = (int)$days[0];
         $data['next_month_day'] = (int)$days[1];
 
-        if ($request_inputs->has('cost')) {
-            $data['costs'] = $request_inputs->get('cost');
-        }
+        $parsed_start_date = CarbonImmutable::parse(date('Y-m') . '-' . (int)$days[0]);
+        $parsed_end_date = CarbonImmutable::parse(date('Y-m') . '-' . (int)$days[1]);
+
+        $data['costs'] = $this->createArrayDates($parsed_start_date, $parsed_end_date);
 
         CostTracking::create($data);
 
@@ -132,36 +133,14 @@ class CostService
     }
 
     /**
-     * @param Carbon $parsed_start_date
-     * @param Carbon $parsed_end_date
-     * @param CarbonImmutable $current_date
+     * @param CarbonImmutable $parsed_start_date
+     * @param CarbonImmutable $parsed_end_date
      * @param Collection $data
+     * @param float|int $money_earned
      */
     private function processDatePeriod(CarbonImmutable $parsed_start_date, CarbonImmutable $parsed_end_date, Collection $data, float|int $money_earned) : void
     {
-        $dates = [];
-
-        $days_from_db_for_start_month = $parsed_start_date->daysInMonth;
-        $start_day = (int)$parsed_start_date->format('d');
-        $days_from_db_for_next_month = (int)$parsed_end_date->format('d');
-
-        $count_days = 0;
-
-        $left_days_in_start_month = ($days_from_db_for_start_month - $start_day);
-
-        for ($day_index = 0; $day_index <= $left_days_in_start_month; $day_index++) {
-            $dates[$count_days]['date'] = $parsed_start_date->add($count_days, 'days')->toDateString();
-
-            $count_days++;
-        }
-
-        $count_days--;
-
-        for ($day_index = 0; $day_index <= $days_from_db_for_next_month; $day_index++) {
-            $dates[$count_days]['date'] = $parsed_start_date->add($count_days, 'days')->toDateString();
-
-            $count_days++;
-        }
+        $dates = $this->createArrayDates($parsed_start_date, $parsed_end_date);
 
         $total_days = count($dates);
 
@@ -199,7 +178,7 @@ class CostService
      * @param int $start_month_number
      * @param int $days_from_db_for_start_month
      * @param int $days_from_db_for_next_month
-     * @return array
+     * @return int
      */
     private function takeDaysFromCurrentPeriod(CarbonImmutable $current_date, int $start_month_number, int $days_from_db_for_start_month, int $days_from_db_for_next_month) : int
     {
@@ -225,5 +204,43 @@ class CostService
         }
 
         return count($dates);
+    }
+
+    /**
+     * @param CarbonImmutable $parsed_start_date
+     * @param CarbonImmutable $parsed_end_date
+     * @return array
+     */
+    private function createArrayDates(CarbonImmutable $parsed_start_date, CarbonImmutable $parsed_end_date) : array
+    {
+        $dates = [];
+
+        $days_from_db_for_start_month = $parsed_start_date->daysInMonth;
+        $start_day = (int)$parsed_start_date->format('d');
+        $days_from_db_for_next_month = (int)$parsed_end_date->format('d');
+
+        $count_days = 0;
+
+        $left_days_in_start_month = ($days_from_db_for_start_month - $start_day);
+
+        for ($day_index = 0; $day_index <= $left_days_in_start_month; $day_index++) {
+            $need_date = $parsed_start_date->add($count_days, 'days')->toDateString();
+
+            $dates[$need_date]['date'] = $need_date;
+
+            $count_days++;
+        }
+
+        $count_days--;
+
+        for ($day_index = 0; $day_index <= $days_from_db_for_next_month; $day_index++) {
+            $need_date = $parsed_start_date->add($count_days, 'days')->toDateString();
+
+            $dates[$need_date]['date'] = $need_date;
+
+            $count_days++;
+        }
+
+        return $dates;
     }
 }

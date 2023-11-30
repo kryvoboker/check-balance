@@ -70,7 +70,7 @@
                                                  data-bs-parent="#accordion-costs">
                                                 <div class="accordion-body add-costs">
                                                     <div class="d-flex flex-column gap-3 col-12 mb-3">
-                                                        <button type="button"
+                                                        <button type="button" data-date="{{ $date['date'] }}"
                                                                 class="btn btn-success costs__add-costs-btn col-3">
                                                             <i class="bi bi-plus-circle"></i>
                                                             <span class="ms-2">

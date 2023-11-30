@@ -3,7 +3,7 @@
 +function () {
     const findElems = (className : string, context : Document | HTMLElement | HTMLFormElement = document) : NodeListOf<HTMLFormElement> | NodeListOf<HTMLElement> | null =>
             context.querySelectorAll(className),
-        findElem = (className : string, context : Document | HTMLElement | HTMLFormElement = document) : HTMLElement | null => context.querySelector(className),
+        findElem = (className : string, context : Document | HTMLElement | HTMLFormElement | Element = document) : HTMLElement | null => context.querySelector(className),
         addClassName = (className : string, element : HTMLElement) : void => element.classList.add(className),
         arrayFrom = <T>(pseudoArray : ArrayLike<T>) : T[] => Array.from(pseudoArray);
 
@@ -92,12 +92,21 @@
     function enableTooltips() : void {
         const tooltipTriggerList : NodeListOf<HTMLElement> = findElems('[data-bs-toggle="tooltip"]');
         // @ts-ignore
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+        [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
     }
 
     function processInsertCostPrototype(addCostsBtn : HTMLElement, blockForAddCost : HTMLElement, inputFieldsPrototypeHtml : HTMLElement) {
         addCostsBtn.addEventListener('click', () : void => {
-            const inputFields : Node = inputFieldsPrototypeHtml.cloneNode(true);
+            const inputFields : Node = inputFieldsPrototypeHtml.cloneNode(true),
+                date = addCostsBtn.dataset.date;
+
+            if (inputFields instanceof Element) {
+                const inputNameField : HTMLElement = findElem('[name=name]', inputFields),
+                    inputTotalField : HTMLElement = findElem('[name=total]', inputFields);
+
+                inputNameField.name = `cost[${date}][name][]`;
+                inputTotalField.name = `cost[${date}][total][]`;
+            }
 
             blockForAddCost.append(inputFields);
 
