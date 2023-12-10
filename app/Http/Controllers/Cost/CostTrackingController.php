@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Cost;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Cost\DestroyCostTrackingRequest;
 use App\Http\Requests\Cost\EditCostTrackingRequest;
 use App\Http\Requests\Cost\ShowCostTrackingRequest;
-use App\Models\Cost\CostTracking;
 use App\Http\Requests\Cost\StoreCostTrackingRequest;
 use App\Http\Requests\Cost\UpdateCostTrackingRequest;
 use App\Services\Cost\CostService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 
 class CostTrackingController extends Controller
 {
@@ -106,8 +105,15 @@ class CostTrackingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CostTracking $costTracking)
+    public function destroy(DestroyCostTrackingRequest $request) : RedirectResponse
     {
-        //
+        $cost_tracking = $request->getCostTracking();
+
+        $cost_id = (int)$request->route('cost');
+
+        $cost_tracking::destroy($cost_id);
+
+        return redirect(route('costs.index'))
+            ->with('success_destroy_cost', __('cost/destroy.text_success_destroy_cost'));
     }
 }

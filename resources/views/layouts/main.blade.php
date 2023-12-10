@@ -34,12 +34,6 @@
 
                                 {{ __('cost/main.create_cost') }}
                             </a>
-
-                            <button class="btn btn-outline-danger delete-cost" type="button">
-                                <i class="bi bi-trash"></i>
-
-                                {{ __('cost/main.delete_cost') }}
-                            </button>
                         @endif
 
                         @if(isset($cost_id) and isset($current_route_name))
@@ -49,10 +43,19 @@
                                     <span>{{ __('cost/show.text_edit_cost') }}</span>
                                 </a>
                             @elseif($current_route_name == 'costs.edit')
-                                    <button class="btn btn-outline-info" type="submit" form="edit-cost-form">
-                                        <i class="fa-solid fa-floppy-disk"></i>
-                                        <span>{{ __('cost/edit.text_edit_update') }}</span>
-                                    </button>
+                                <button class="btn btn-outline-info" type="submit" form="edit-cost-form">
+                                    <i class="fa-solid fa-floppy-disk"></i>
+                                    <span>{{ __('cost/edit.text_edit_update') }}</span>
+                                </button>
+                            @endif
+
+                            @if($current_route_name == 'costs.show' or $current_route_name == 'costs.edit')
+                                <button class="btn btn-outline-danger delete-cost-btn" type="submit"
+                                        form="delete-cost-form">
+                                    <i class="bi bi-trash"></i>
+
+                                    {{ __('cost/main.delete_cost') }}
+                                </button>
                             @endif
                         @endif
 

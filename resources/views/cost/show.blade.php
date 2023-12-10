@@ -7,6 +7,12 @@
 
 @section('content')
     <div class="container">
+        <form class="d-none" method="POST"
+              action="{{ route('costs.destroy', ['cost' => $cost_id]) }}" id="delete-cost-form">
+            @csrf
+            @method('DELETE')
+        </form>
+
         <h1 class="mb-5">
             {{ __(
                 'cost/show.heading_title',
@@ -21,8 +27,10 @@
                     <tr>
                         <th class="show-costs-list__num" scope="col">#</th>
                         <th class="show-costs-list__date" scope="col">{{ __('cost/show.text_date') }}</th>
-                        <th class="show-costs-list__limit-per-day" scope="col">{{ __('cost/show.text_limit_per_day') }}</th>
-                        <th class="show-costs-list__limit-per-day" scope="col">{{ __('cost/show.text_limit_per_left_day') }}</th>
+                        <th class="show-costs-list__limit-per-day"
+                            scope="col">{{ __('cost/show.text_limit_per_day') }}</th>
+                        <th class="show-costs-list__limit-per-day"
+                            scope="col">{{ __('cost/show.text_limit_per_left_day') }}</th>
                         <th scope="col">{{ __('cost/show.text_costs') }}</th>
                     </tr>
                     </thead>
@@ -46,10 +54,45 @@
                                                 <span>{{ __('cost/show.text_hide_costs') }}</span>
                                             </button>
                                         </h2>
-                                        <div id="collapse-costs-{{ $loop->iteration }}" class="accordion-collapse collapse"
+                                        <div id="collapse-costs-{{ $loop->iteration }}"
+                                             class="accordion-collapse collapse"
                                              data-bs-parent="#accordion-costs">
                                             <div class="accordion-body">
-                                                <p>Some costs</p>
+                                                @if(isset($date['costs']) and $date['costs'])
+                                                    @foreach ($date['costs'] as $cost)
+                                                        <div class="row mb-3">
+                                                            <div class="row mb-3">
+                                                                <label class="col-sm-2 col-form-label"
+                                                                       for="cost-name-{{ $loop->iteration }}">
+                                                                    {{ __('cost/show.text_cost_name') }}
+                                                                </label>
+
+                                                                <div class="col-sm-3">
+                                                                    <input class="form-control" type="text"
+                                                                           value="{{ $cost['cost_name'] }}"
+                                                                           id="cost-name-{{ $loop->iteration }}" readonly>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row mb-3">
+                                                                <label class="col-sm-2 col-form-label"
+                                                                       for="cost-total-{{ $loop->iteration }}">
+                                                                    {{ __('cost/show.text_cost_total') }}
+                                                                </label>
+
+                                                                <div class="col-sm-3">
+                                                                    <input class="form-control" type="number"
+                                                                           value="{{ $cost['cost_total'] }}"
+                                                                           id="cost-total-{{ $loop->iteration }}" readonly>
+                                                                </div>
+                                                            </div>
+
+                                                            <hr/>
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <p>{{ __('cost/show.text_empty_cost') }}</p>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>

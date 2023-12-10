@@ -20,7 +20,7 @@ use Illuminate\Support\Carbon;
  * @property float $money_earned
  * @property int $start_month_day
  * @property int $next_month_day
- * @property string $costs
+ * @property string|array $costs
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Collection<int, Dream> $dreams

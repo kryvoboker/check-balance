@@ -7,6 +7,12 @@
 
 @section('content')
     <div class="container">
+        <form class="d-none" method="POST"
+              action="{{ route('costs.destroy', ['cost' => $cost_id]) }}" id="delete-cost-form">
+            @csrf
+            @method('DELETE')
+        </form>
+
         <h1 class="mb-5">
             {{ __(
                 'cost/edit.heading_title',
@@ -74,9 +80,45 @@
                                                                 class="btn btn-success costs__add-costs-btn col-3">
                                                             <i class="bi bi-plus-circle"></i>
                                                             <span class="ms-2">
-                                                            {{ __('cost/create.text_add_costs_btn') }}
-                                                        </span>
+                                                                {{ __('cost/create.text_add_costs_btn') }}
+                                                            </span>
                                                         </button>
+
+                                                        @if(isset($date['costs']) and $date['costs'])
+                                                            @foreach ($date['costs'] as $cost)
+                                                                <div class="row mb-3">
+                                                                    <div class="row mb-3">
+                                                                        <label class="col-sm-2 col-form-label"
+                                                                               for="cost-name-{{ $loop->iteration }}">
+                                                                            {{ __('cost/show.text_cost_name') }}
+                                                                        </label>
+
+                                                                        <div class="col-sm-3">
+                                                                            <input class="form-control" type="text"
+                                                                                   value="{{ $cost['cost_name'] }}"
+                                                                                   name="cost[{{ $date['date'] }}][name][]"
+                                                                                   id="cost-name-{{ $loop->iteration }}" required>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row mb-3">
+                                                                        <label class="col-sm-2 col-form-label"
+                                                                               for="cost-total-{{ $loop->iteration }}">
+                                                                            {{ __('cost/show.text_cost_total') }}
+                                                                        </label>
+
+                                                                        <div class="col-sm-3">
+                                                                            <input class="form-control" type="number"
+                                                                                   value="{{ $cost['cost_total'] }}"
+                                                                                   name="cost[{{ $date['date'] }}][total][]"
+                                                                                   id="cost-total-{{ $loop->iteration }}" required>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <hr/>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>

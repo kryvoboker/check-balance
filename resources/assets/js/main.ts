@@ -97,18 +97,18 @@
 
     function processInsertCostPrototype(addCostsBtn : HTMLElement, blockForAddCost : HTMLElement, inputFieldsPrototypeHtml : HTMLElement) {
         addCostsBtn.addEventListener('click', () : void => {
-            const inputFields : Node = inputFieldsPrototypeHtml.cloneNode(true),
+            const inputFieldsBlock : Node = inputFieldsPrototypeHtml.cloneNode(true),
                 date = addCostsBtn.dataset.date;
 
-            if (inputFields instanceof Element) {
-                const inputNameField : HTMLElement = findElem('[name=name]', inputFields),
-                    inputTotalField : HTMLElement = findElem('[name=total]', inputFields);
+            if (inputFieldsBlock instanceof Element) {
+                const inputNameField : HTMLElement = findElem('[name=name]', inputFieldsBlock),
+                    inputTotalField : HTMLElement = findElem('[name=total]', inputFieldsBlock);
 
                 inputNameField.name = `cost[${date}][name][]`;
                 inputTotalField.name = `cost[${date}][total][]`;
             }
 
-            blockForAddCost.append(inputFields);
+            blockForAddCost.append(inputFieldsBlock);
 
             findElem('.d-none', blockForAddCost)?.classList.remove('d-none', 'add-costs-prototype');
         });

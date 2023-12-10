@@ -6,11 +6,17 @@
     <div class="container">
         <h1>{{ __('cost/main.heading_title') }}</h1>
 
+        @if(session()->has('success_destroy_cost'))
+            <div class="alert alert-success">
+                <span>{!! session()->get('success_destroy_cost') !!}</span>
+                <button class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
         <div class="costs-list"> {{-- //TODO: change it --}}
             <table class="table table-success table-striped table-bordered">
                 <thead>
                 <tr>
-                    <th scope="col"></th>
                     <th scope="col">
                         {{ __('cost/main.text_cost_id') }}
                     </th>
@@ -32,11 +38,6 @@
                 <tbody>
                 @forelse($costs_list as $cost)
                     <tr>
-                        <td>
-                            <input class="form-check-input" type="checkbox"
-                                   name="delete_cost[{{ $cost->id }}]"
-                                   aria-label="delete cost">
-                        </td>
                         <th scope="row">{{ $cost->id }}</th>
                         <td>{{ $cost->user_id }}</td>
                         <td>{{ $cost->money_earned }}</td>
