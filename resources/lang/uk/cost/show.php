@@ -12,6 +12,10 @@ return [
     'text_show_costs'               => 'Показати витрати',
     'text_hide_costs'               => 'Сховати витрати',
 
+    'text_total_costs'              => 'Загальна сума витрат',
+    'text_money_left'               => 'Всього грошей залишилось',
+    'text_money_earned'             => 'Сума з/п',
+
     'text_cost_name'                => 'Назва витрати',
     'text_cost_total'               => 'Сума витрати',
     'text_empty_cost'               => 'Ви ще не зберігали витрати для цієї дати!',

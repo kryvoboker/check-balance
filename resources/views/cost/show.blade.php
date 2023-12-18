@@ -20,6 +20,35 @@
             ) }}
         </h1>
 
+        <table class="table table-bordered table-primary">
+            <thead>
+            <tr>
+                <th scope="col">
+                    {{ __('cost/show.text_total_costs') }}
+                </th>
+                <th scope="col">
+                    {{ __('cost/show.text_money_left') }}
+                </th>
+                <th scope="col">
+                    {{ __('cost/show.text_money_earned') }}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    {{ $cost_info->get('total_costs') }}
+                </td>
+                <td>
+                    {{ $cost_info->get('money_left') }}
+                </td>
+                <td>
+                    {{ $cost_info->get('money_earned') }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
         <div class="show-costs-list">
             @if($cost_info->has('dates'))
                 <table class="table table-success table-striped table-bordered">
@@ -42,23 +71,23 @@
                             <td class="show-costs-list__limit-per-day">{{ $cost_info->get('money_limit_per_day') }}</td>
                             <td class="show-costs-list__limit-per-day">{{ $date['money_limit_per_left_day'] ?? '' }}</td>
                             <td>
-                                <div class="accordion" id="accordion-costs">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target="#collapse-costs-{{ $loop->iteration }}"
-                                                    aria-expanded="false"
-                                                    aria-controls="collapse-costs">
-                                                <span>{{ __('cost/show.text_show_costs') }}</span>
-                                                <span>{{ __('cost/show.text_hide_costs') }}</span>
-                                            </button>
-                                        </h2>
-                                        <div id="collapse-costs-{{ $loop->iteration }}"
-                                             class="accordion-collapse collapse"
-                                             data-bs-parent="#accordion-costs">
-                                            <div class="accordion-body">
-                                                @if(isset($date['costs']) and $date['costs'])
+                                @if(isset($date['costs']) and $date['costs'])
+                                    <div class="accordion" id="accordion-costs">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header">
+                                                <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#collapse-costs-{{ $loop->iteration }}"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapse-costs">
+                                                    <span>{{ __('cost/show.text_show_costs') }}</span>
+                                                    <span>{{ __('cost/show.text_hide_costs') }}</span>
+                                                </button>
+                                            </h2>
+                                            <div id="collapse-costs-{{ $loop->iteration }}"
+                                                 class="accordion-collapse collapse"
+                                                 data-bs-parent="#accordion-costs">
+                                                <div class="accordion-body">
                                                     @foreach ($date['costs'] as $cost)
                                                         <div class="row mb-3">
                                                             <div class="row mb-3">
@@ -90,13 +119,13 @@
                                                             <hr/>
                                                         </div>
                                                     @endforeach
-                                                @else
-                                                    <p>{{ __('cost/show.text_empty_cost') }}</p>
-                                                @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @else
+                                    <p>{{ __('cost/show.text_empty_cost') }}</p>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

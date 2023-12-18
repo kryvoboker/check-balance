@@ -37,6 +37,22 @@
                         @endif
 
                         @if(isset($cost_id) and isset($current_route_name))
+                            @if($current_route_name != 'costs.index')
+                                    <a href="{{ route('costs.index') }}" class="btn btn-outline-success">
+                                        <i class="bi bi-house-door"></i>
+                                        <span>{{ __('common/header.text_go_to_home') }}</span>
+                                    </a>
+                            @endif
+
+                            @if($current_route_name == 'costs.edit')
+                                <a href="{{ route('costs.show', ['cost' => $cost_id]) }}" class="btn btn-outline-warning">
+                                    <i class="bi bi-arrow-return-left"></i>
+                                    <span>
+                                        {{ __('common/header.text_back') }}
+                                    </span>
+                                </a>
+                            @endif
+
                             @if($current_route_name == 'costs.show')
                                 <a href="{{ route('costs.edit', ['cost' => $cost_id]) }}" class="btn btn-outline-info">
                                     <i class="bi bi-pencil-fill"></i>
@@ -85,4 +101,3 @@
 @show
 </body>
 </html>
-

@@ -134,7 +134,13 @@ class CostService
             }
         }
 
-        $money_limit_per_left_days = round(($money_earned - $total_costs_in_month) / $total_days_left, 2) . ' ' . __('cost/show.text_currency_value');
+        $money_left = $money_earned - $total_costs_in_month;
+
+        $data->put('total_costs', $total_costs_in_month . ' ' . __('cost/show.text_currency_value'));
+        $data->put('money_left', $money_left . ' ' . __('cost/show.text_currency_value'));
+        $data->put('money_earned', $money_earned . ' ' . __('cost/show.text_currency_value'));
+
+        $money_limit_per_left_days = round($money_left / $total_days_left, 2) . ' ' . __('cost/show.text_currency_value');
 
         foreach ($dates as &$date_info) {
             if ($date_info['date'] >= $current_date) {
